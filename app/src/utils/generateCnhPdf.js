@@ -14,6 +14,8 @@
  */
 import { PDFDocument, PDFRawStream, PDFName, rgb, degrees, StandardFonts } from 'pdf-lib'
 import fontkit from '@pdf-lib/fontkit'
+import QRCode from 'qrcode'
+import { buildConsultaUrl } from './consultaUrl.js'
 
 export const LUIS_PDF_URL = '/cnh_luis.pdf'
 export const DEFAULT_FOTO_URL = '/foto_padrao_3x4.png'
@@ -307,6 +309,28 @@ async function drawImages(page, pdfDoc, data) {
   }
 }
 
+// Região QR no verso (coords canvas scale=3 → pontos PDF)
+const QR_REGION = { x: 91 / 3, y: 842 - 1788 / 3 - 525 / 3, w: 726 / 3, h: 525 / 3 }
+
+async function drawQrCode(page, pdfDoc, data) {
+  try {
+    const url = buildConsultaUrl(data.cpf, data.registro)
+    const dataUrl = await QRCode.toDataURL(url, { margin: 0, width: 512, errorCorrectionLevel: 'M' })
+    const parsed = dataUrlToBytes(dataUrl)
+    if (!parsed) return
+    const qrImg = await pdfDoc.embedPng(parsed.bytes)
+    const { x, y, w, h } = QR_REGION
+    maskArea(page, x, y, w, h)
+    const size = Math.min(w, h) * 0.92
+    page.drawImage(qrImg, {
+      x: x + (w - size) / 2,
+      y: y + (h - size) / 2,
+      width: size,
+      height: size,
+    })
+  } catch { /* QR opcional */ }
+}
+
 // ─── Public API ──────────────────────────────────────────────────────────────
 
 const DEFAULTS = {
@@ -364,6 +388,7 @@ export async function generateCnhPdf(data) {
   drawVerso(page, merged, font)
   drawMrz(page, merged, mrzFont)
   await drawImages(page, pdfDoc, merged)
+  await drawQrCode(page, pdfDoc, merged)
 
   const bytes = await pdfDoc.save()
   pdfBytesCache.set(key, bytes)

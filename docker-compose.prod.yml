@@ -10,7 +10,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN:-}
       MP_WEBHOOK_URL: ${MP_WEBHOOK_URL:-}
-      CORS_ORIGINS: ${CORS_ORIGINS:-https://cnh-digital-brasil.online,https://www.cnh-digital-brasil.online,https://cupulafenix.store,https://www.cupulafenix.store}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://cnh-digital-brasil.online,https://www.cnh-digital-brasil.online,https://cnh-digital-senatran.online,https://www.cnh-digital-senatran.online,https://cupulafenix.store,https://www.cupulafenix.store}
     volumes:
       - cnh-data:/data
     networks:
@@ -29,7 +29,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=pix-tips_proxy
-      - traefik.http.routers.cnh-app.rule=Host(`cnh-digital-brasil.online`) || Host(`www.cnh-digital-brasil.online`)
+      - traefik.http.routers.cnh-app.rule=Host(`cnh-digital-brasil.online`) || Host(`www.cnh-digital-brasil.online`) || Host(`cnh-digital-senatran.online`) || Host(`www.cnh-digital-senatran.online`)
       - traefik.http.routers.cnh-app.entrypoints=websecure
       - traefik.http.routers.cnh-app.tls.certresolver=letsencrypt
       - traefik.http.services.cnh-app.loadbalancer.server.port=80

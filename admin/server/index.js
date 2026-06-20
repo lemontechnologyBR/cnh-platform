@@ -6,7 +6,7 @@ import authRouter, { JWT_SECRET } from './routes/auth.js'
 import cnhsRouter from './routes/cnhs.js'
 import usersRouter from './routes/users.js'
 import rechargesRouter from './routes/recharges.js'
-import { findCnhByCpf, getCnhById, isCnhExpired, deleteCnh, getSettings, CNH_TTL_DAYS } from './db.js'
+import { findCnhByCpf, findCnhByCpfAndRegistro, getCnhById, isCnhExpired, deleteCnh, getSettings, CNH_TTL_DAYS } from './db.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -75,6 +75,24 @@ app.get('/api/public/cnh', async (req, res) => {
   } catch {
     res.status(401).json({ error: 'Sessão inválida' })
   }
+})
+
+// Consulta pública via QR Code (CPF + número de registro)
+app.get('/api/public/consulta', async (req, res) => {
+  const { cpf, numero_registro: numeroRegistro } = req.query
+  if (!cpf || !numeroRegistro) {
+    return res.status(400).json({ error: 'CPF e número de registro são obrigatórios.' })
+  }
+
+  const cnh = await findCnhByCpfAndRegistro(cpf, numeroRegistro)
+  if (!cnh) return res.status(404).json({ error: 'CNH não encontrada para os dados informados.' })
+  if (isCnhExpired(cnh)) {
+    await deleteCnh(cnh.id)
+    return res.status(401).json({ error: 'CNH expirada.' })
+  }
+
+  const { pin: _pin, createdBy: _cb, ...cnhSafe } = cnh
+  res.json(cnhSafe)
 })
 
 // Endpoint público: configurações visíveis ao operador (sem dados sensíveis)

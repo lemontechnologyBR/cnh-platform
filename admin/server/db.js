@@ -185,6 +185,14 @@ export async function findCnhByCpf(cpf) {
   return null
 }
 
+export async function findCnhByCpfAndRegistro(cpf, numeroRegistro) {
+  const cnh = await findCnhByCpf(cpf)
+  if (!cnh) return null
+  const normalized = (s) => String(s || '').replace(/\D/g, '')
+  if (normalized(cnh.registro) !== normalized(numeroRegistro)) return null
+  return cnh
+}
+
 export async function createCnh(data) {
   const created_at = new Date().toISOString()
   const cnh = {

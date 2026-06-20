@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import ConsultaEntry from './pages/ConsultaEntry'
+import SenatranConsultaPage from './pages/SenatranConsultaPage'
+import SenatranQrPage from './pages/SenatranQrPage'
 import SplashPage from './pages/SplashPage'
 import GovBrLoginPage from './pages/GovBrLoginPage'
 import GovBrPasswordPage from './pages/GovBrPasswordPage'
@@ -11,7 +14,10 @@ import MultasPage from './pages/MultasPage'
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<SplashPage />} />
+      <Route path="/" element={<ConsultaEntry />} />
+      <Route path="/consulta" element={<SenatranConsultaPage />} />
+      <Route path="/consulta/qrcode" element={<SenatranQrPage />} />
+      <Route path="/splash" element={<SplashPage />} />
       <Route path="/govbr-login" element={<GovBrLoginPage />} />
       <Route path="/govbr-senha" element={<GovBrPasswordPage />} />
       <Route path="/home" element={<HomePage />} />
