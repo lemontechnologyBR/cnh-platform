@@ -413,25 +413,24 @@ function buildPdfFilename(data = {}) {
   return `CNH_${nome}.pdf`
 }
 
-/** Gera e baixa o PDF da CNH no dispositivo do usuário */
-export async function downloadCnhPdf(data = {}) {
-  const bytes = await generateCnhPdf(data)
-  const filename = buildPdfFilename(data)
-  const blob = new Blob([bytes], { type: 'application/pdf' })
-  const url = URL.createObjectURL(blob)
-  const cleanup = () => setTimeout(() => URL.revokeObjectURL(url), 60000)
-
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+function isMobileDevice() {
+  const ua = navigator.userAgent
+  return /Android|iPhone|iPad|iPod/i.test(ua)
     || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+}
 
-  // iOS Safari não respeita <a download> — abre o PDF para salvar via ícone de compartilhar
-  if (isIOS) {
-    const opened = window.open(url, '_blank')
-    if (!opened) window.location.assign(url)
-    cleanup()
-    return
-  }
+function isIOSDevice() {
+  const ua = navigator.userAgent
+  return /iPhone|iPad|iPod/i.test(ua)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+}
 
+function toPdfBlob(bytes) {
+  const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)
+  return new Blob([buffer], { type: 'application/pdf' })
+}
+
+function triggerAnchorDownload(url, filename) {
   const link = document.createElement('a')
   link.href = url
   link.download = filename
@@ -440,5 +439,85 @@ export async function downloadCnhPdf(data = {}) {
   document.body.appendChild(link)
   link.click()
   link.remove()
+}
+
+function showPdfInWindow(win, url) {
+  if (!win || win.closed) {
+    window.location.assign(url)
+    return
+  }
+  try {
+    win.location.replace(url)
+  } catch {
+    window.location.assign(url)
+  }
+}
+
+function writeLoadingPage(win) {
+  if (!win || win.closed) return
+  try {
+    win.document.open()
+    win.document.write(
+      '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<title>CNH Digital</title></head><body style="margin:0;font-family:sans-serif;background:#ebebeb">'
+      + '<p style="text-align:center;margin-top:45vh;color:#555">Gerando PDF...</p></body></html>',
+    )
+    win.document.close()
+  } catch { /* popup blocked or cross-origin */ }
+}
+
+/** Chamar no clique (síncrono) antes do await — mantém permissão no mobile */
+export function preparePdfDownloadWindow() {
+  if (!isMobileDevice()) return null
+  const win = window.open('about:blank', '_blank')
+  writeLoadingPage(win)
+  return win
+}
+
+async function tryNativeShare(blob, filename) {
+  const file = new File([blob], filename, { type: 'application/pdf' })
+  if (!navigator.canShare?.({ files: [file] })) return false
+  try {
+    await navigator.share({ files: [file], title: 'CNH Digital' })
+    return true
+  } catch (err) {
+    return err?.name === 'AbortError'
+  }
+}
+
+/** Gera e baixa o PDF da CNH no dispositivo do usuário */
+export async function downloadCnhPdf(data = {}, preOpenedWindow = null) {
+  const bytes = await generateCnhPdf(data)
+  const filename = buildPdfFilename(data)
+  const blob = toPdfBlob(bytes)
+  const url = URL.createObjectURL(blob)
+  const cleanup = () => setTimeout(() => URL.revokeObjectURL(url), 120000)
+
+  // Desktop — download direto
+  if (!isMobileDevice()) {
+    triggerAnchorDownload(url, filename)
+    cleanup()
+    return
+  }
+
+  const ios = isIOSDevice()
+
+  // Android: share nativo abre "Salvar em Downloads" / Drive
+  if (!ios && (await tryNativeShare(blob, filename))) {
+    if (preOpenedWindow && !preOpenedWindow.closed) preOpenedWindow.close()
+    cleanup()
+    return
+  }
+
+  // iOS / fallback: PDF na aba aberta no clique (Salvar via ícone do Safari)
+  if (ios || preOpenedWindow) {
+    showPdfInWindow(preOpenedWindow, url)
+    cleanup()
+    return
+  }
+
+  // Android fallback sem popup: download + nova aba
+  triggerAnchorDownload(url, filename)
+  window.open(url, '_blank')
   cleanup()
 }

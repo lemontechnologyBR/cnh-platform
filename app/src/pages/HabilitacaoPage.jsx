@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import CnhPdfCard from '../components/CnhPdfCard'
 import CnhQrSlide, { getCnhQrUrl } from '../components/CnhQrSlide'
 import { fetchCnhUser, loadCnhUserFromStorage } from '../utils/cnhUser.js'
-import { clearCnhPdfCache, downloadCnhPdf } from '../utils/generateCnhPdf.js'
+import { clearCnhPdfCache, downloadCnhPdf, preparePdfDownloadWindow } from '../utils/generateCnhPdf.js'
 
 const SLIDES = [
   { id: 'frente', label: 'Frente' },
@@ -75,9 +75,11 @@ export default function HabilitacaoPage() {
     if (label === 'Exportar') {
       if (exporting) return
       setExporting(true)
-      downloadCnhPdf(cnhData)
+      const preOpened = preparePdfDownloadWindow()
+      downloadCnhPdf(cnhData, preOpened)
         .catch((err) => {
           console.error('export pdf:', err)
+          if (preOpened && !preOpened.closed) preOpened.close()
           alert('Não foi possível exportar o PDF. Tente novamente.')
         })
         .finally(() => setExporting(false))
