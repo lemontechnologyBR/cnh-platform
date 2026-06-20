@@ -146,7 +146,7 @@ export default function RechargePage() {
         )}
 
         {step === 'form' && (
-          <div style={{ background: '#1a1d27', borderRadius: 14, border: '1px solid #2d3748', padding: 28 }}>
+          <div style={{ background: '#161210', borderRadius: 14, border: '1px solid #3a2820', padding: 28 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <h2 style={{ fontSize: 16, fontWeight: 600, color: '#f1f5f9' }}>Escolha o valor</h2>
               {bonus > 0 && (
@@ -161,8 +161,8 @@ export default function RechargePage() {
                 const total = bonus > 0 ? +(p * (1 + bonus / 100)).toFixed(2) : null
                 return (
                   <button key={p} onClick={() => setAmount(String(p))} style={{
-                    background: String(amount) === String(p) ? '#4f8ef7' : '#0f1117',
-                    border: `1px solid ${String(amount) === String(p) ? '#4f8ef7' : '#2d3748'}`,
+                    background: String(amount) === String(p) ? '#FF6B00' : '#0a0908',
+                    border: `1px solid ${String(amount) === String(p) ? '#FF6B00' : '#3a2820'}`,
                     borderRadius: 10, padding: '12px 8px',
                     color: String(amount) === String(p) ? '#fff' : '#94a3b8',
                     fontSize: 14, fontWeight: 600, cursor: 'pointer', lineHeight: 1.4,
@@ -182,7 +182,7 @@ export default function RechargePage() {
                   value={amount}
                   onChange={e => setAmount(e.target.value.replace(/[^\d,.]/, ''))}
                   placeholder="0,00"
-                  style={{ width: '100%', background: '#0f1117', border: '1px solid #2d3748', borderRadius: 8, padding: '12px 14px 12px 38px', color: '#e2e8f0', fontSize: 16, outline: 'none', boxSizing: 'border-box' }}
+                  style={{ width: '100%', background: '#0a0908', border: '1px solid #3a2820', borderRadius: 8, padding: '12px 14px 12px 38px', color: '#e2e8f0', fontSize: 16, outline: 'none', boxSizing: 'border-box' }}
                 />
               </div>
             </div>
@@ -192,7 +192,7 @@ export default function RechargePage() {
             <button
               onClick={requestRecharge}
               disabled={loading || !amount}
-              style={{ width: '100%', background: '#4f8ef7', border: 'none', borderRadius: 10, padding: '14px 0', color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: (loading || !amount) ? 0.5 : 1 }}
+              style={{ width: '100%', background: '#FF6B00', border: 'none', borderRadius: 10, padding: '14px 0', color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer', opacity: (loading || !amount) ? 0.5 : 1 }}
             >
               {loading ? 'Gerando PIX...' : '⚡ Gerar QR Code PIX'}
             </button>
@@ -200,7 +200,7 @@ export default function RechargePage() {
         )}
 
         {step === 'qr' && recharge && (
-          <div style={{ background: '#1a1d27', borderRadius: 14, border: '1px solid #2d3748', padding: 28, textAlign: 'center' }}>
+          <div style={{ background: '#161210', borderRadius: 14, border: '1px solid #3a2820', padding: 28, textAlign: 'center' }}>
 
             {/* Status badge */}
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `${statusColor[payStatus]}15`, border: `1px solid ${statusColor[payStatus]}40`, borderRadius: 99, padding: '6px 16px', marginBottom: 20 }}>
@@ -217,7 +217,7 @@ export default function RechargePage() {
                 <div style={{ color: '#64748b', fontSize: 14, marginBottom: 4 }}>{fmt(recharge.amount)} foram adicionados ao seu saldo automaticamente.</div>
                 <div style={{ fontSize: 24, fontWeight: 800, color: '#34d399', marginTop: 16 }}>{me && fmt(me.saldo)}</div>
                 <div style={{ color: '#64748b', fontSize: 12 }}>saldo atual</div>
-                <button onClick={() => { setStep('form'); setAmount('') }} style={{ marginTop: 20, background: '#4f8ef7', border: 'none', borderRadius: 8, padding: '10px 28px', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                <button onClick={() => { setStep('form'); setAmount('') }} style={{ marginTop: 20, background: '#FF6B00', border: 'none', borderRadius: 8, padding: '10px 28px', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
                   Nova recarga
                 </button>
               </div>
@@ -225,7 +225,7 @@ export default function RechargePage() {
               <div style={{ padding: '20px 0' }}>
                 <div style={{ fontSize: 48, marginBottom: 12 }}>❌</div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: '#f87171', marginBottom: 8 }}>Pagamento cancelado ou expirado</div>
-                <button onClick={() => { setStep('form'); setAmount('') }} style={{ background: '#2d3748', border: 'none', borderRadius: 8, padding: '10px 24px', color: '#94a3b8', fontSize: 14, cursor: 'pointer' }}>
+                <button onClick={() => { setStep('form'); setAmount('') }} style={{ background: '#3a2820', border: 'none', borderRadius: 8, padding: '10px 24px', color: '#94a3b8', fontSize: 14, cursor: 'pointer' }}>
                   Tentar novamente
                 </button>
               </div>
@@ -238,7 +238,7 @@ export default function RechargePage() {
                   {qrDataUrl && <img src={qrDataUrl} alt="PIX QR Code" style={{ display: 'block', width: 220, height: 220 }} />}
                 </div>
 
-                <div style={{ fontSize: 22, fontWeight: 800, color: '#4f8ef7', marginBottom: 2 }}>{fmt(recharge.amount)}</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: '#FF6B00', marginBottom: 2 }}>{fmt(recharge.amount)}</div>
                 {bonus > 0 && (
                   <div style={{ fontSize: 13, color: '#34d399', fontWeight: 600, marginBottom: 6 }}>
                     🎁 +{bonus}% bônus → <strong>{fmt(+(recharge.amount * (1 + bonus / 100)).toFixed(2))}</strong> no saldo
@@ -246,12 +246,12 @@ export default function RechargePage() {
                 )}
 
                 {recharge.qrCode && (
-                  <div style={{ background: '#0f1117', border: '1px solid #2d3748', borderRadius: 8, padding: '10px 14px', margin: '0 auto 16px', maxWidth: 420, wordBreak: 'break-all', fontSize: 11, color: '#64748b', textAlign: 'left', lineHeight: 1.6 }}>
+                  <div style={{ background: '#0a0908', border: '1px solid #3a2820', borderRadius: 8, padding: '10px 14px', margin: '0 auto 16px', maxWidth: 420, wordBreak: 'break-all', fontSize: 11, color: '#64748b', textAlign: 'left', lineHeight: 1.6 }}>
                     {recharge.qrCode.slice(0, 60)}...
                   </div>
                 )}
 
-                <button onClick={copyPix} style={{ background: copied ? '#16a34a' : '#2d3748', border: 'none', borderRadius: 8, padding: '10px 24px', color: '#fff', fontSize: 13, cursor: 'pointer', marginBottom: 16, fontWeight: 600, display: 'block', margin: '0 auto 16px' }}>
+                <button onClick={copyPix} style={{ background: copied ? '#16a34a' : '#3a2820', border: 'none', borderRadius: 8, padding: '10px 24px', color: '#fff', fontSize: 13, cursor: 'pointer', marginBottom: 16, fontWeight: 600, display: 'block', margin: '0 auto 16px' }}>
                   {copied ? '✓ Copiado!' : '📋 Copiar código PIX'}
                 </button>
 
@@ -259,7 +259,7 @@ export default function RechargePage() {
                   {recharge.expiresAt && `Expira em: ${new Date(recharge.expiresAt).toLocaleString('pt-BR')}`}
                 </div>
 
-                <button onClick={() => { setStep('form'); setAmount(''); clearInterval(pollRef.current) }} style={{ background: 'transparent', border: '1px solid #2d3748', borderRadius: 8, padding: '8px 20px', color: '#64748b', fontSize: 13, cursor: 'pointer' }}>
+                <button onClick={() => { setStep('form'); setAmount(''); clearInterval(pollRef.current) }} style={{ background: 'transparent', border: '1px solid #3a2820', borderRadius: 8, padding: '8px 20px', color: '#64748b', fontSize: 13, cursor: 'pointer' }}>
                   ← Voltar
                 </button>
               </>
@@ -269,12 +269,12 @@ export default function RechargePage() {
 
         {/* Histórico */}
         {history.length > 0 && (
-          <div style={{ marginTop: 28, background: '#1a1d27', borderRadius: 14, border: '1px solid #2d3748' }}>
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid #2d3748', fontWeight: 600, color: '#f1f5f9', fontSize: 15 }}>
+          <div style={{ marginTop: 28, background: '#161210', borderRadius: 14, border: '1px solid #3a2820' }}>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid #3a2820', fontWeight: 600, color: '#f1f5f9', fontSize: 15 }}>
               Histórico de recargas
             </div>
             {history.map(r => (
-              <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid #1e2536' }}>
+              <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid #221816' }}>
                 <div>
                   <div style={{ fontSize: 14, color: '#e2e8f0', fontWeight: 600 }}>{fmt(r.amount)}</div>
                   <div style={{ fontSize: 11, color: '#475569', marginTop: 2 }}>{new Date(r.created_at).toLocaleString('pt-BR')}</div>

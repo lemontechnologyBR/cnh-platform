@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../utils/api.js'
+import BrandLogo from './BrandLogo.jsx'
+import theme from '../styles/theme.js'
 import '../styles/admin.css'
 
 function usePendingRecharges(isSuperadmin) {
@@ -66,12 +68,8 @@ export default function Layout({ children }) {
       {menuOpen && <div className="admin-overlay" onClick={() => setMenuOpen(false)} aria-hidden="true" />}
 
       <aside className={`admin-sidebar${menuOpen ? ' open' : ''}`}>
-        <div style={{ padding: '24px 20px 20px' }}>
-          <div style={{ fontSize: 20, fontWeight: 800 }}>
-            <span style={{ color: '#4f8ef7' }}>CNH</span>
-            <span style={{ color: '#e2e8f0' }}> Admin</span>
-          </div>
-          <div style={{ color: '#64748b', fontSize: 11, marginTop: 2 }}>Painel de controle</div>
+        <div style={{ padding: '20px 16px 16px' }}>
+          <BrandLogo height={48} />
         </div>
 
         <nav style={{ flex: 1, padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -90,15 +88,15 @@ export default function Layout({ children }) {
                 textDecoration: 'none',
                 fontSize: 14,
                 fontWeight: isActive ? 600 : 400,
-                color: isActive ? '#fff' : '#94a3b8',
-                background: isActive ? '#4f8ef720' : 'transparent',
-                borderLeft: isActive ? '3px solid #4f8ef7' : '3px solid transparent',
+                color: isActive ? '#fff' : theme.textMuted,
+                background: isActive ? theme.accentMuted : 'transparent',
+                borderLeft: isActive ? `3px solid ${theme.accent}` : '3px solid transparent',
               })}
             >
               <span style={{ fontSize: 16 }}>{item.icon}</span>
               <span style={{ flex: 1 }}>{item.label}</span>
               {item.badge > 0 && (
-                <span style={{ background: '#f59e0b', color: '#000', borderRadius: 99, padding: '1px 7px', fontSize: 10, fontWeight: 700 }}>
+                <span style={{ background: theme.accentGold, color: '#000', borderRadius: 99, padding: '1px 7px', fontSize: 10, fontWeight: 700 }}>
                   {item.badge}
                 </span>
               )}
@@ -107,11 +105,11 @@ export default function Layout({ children }) {
         </nav>
 
         {me && me.role !== 'superadmin' && (
-          <div style={{ margin: '0 12px 12px', background: '#0f1117', borderRadius: 10, padding: '12px 14px', border: '1px solid #2d3748' }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#e2e8f0', marginBottom: 2 }}>{me.nome || me.username}</div>
-            <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>Operador</div>
-            <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Saldo</div>
-            <div style={{ fontSize: 18, fontWeight: 800, color: (me.saldo ?? 0) > 0 ? '#34d399' : '#f87171' }}>
+          <div style={{ margin: '0 12px 12px', background: theme.bgMain, borderRadius: 10, padding: '12px 14px', border: `1px solid ${theme.border}` }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: theme.text, marginBottom: 2 }}>{me.nome || me.username}</div>
+            <div style={{ fontSize: 11, color: theme.textDim, marginBottom: 8 }}>Operador</div>
+            <div style={{ fontSize: 10, color: theme.textDim, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Saldo</div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: (me.saldo ?? 0) > 0 ? theme.success : theme.danger }}>
               {fmt(me.saldo)}
             </div>
           </div>
@@ -120,7 +118,7 @@ export default function Layout({ children }) {
         <div style={{ padding: '0 12px 16px' }}>
           <button
             onClick={logout}
-            style={{ width: '100%', background: 'transparent', border: '1px solid #2d3748', borderRadius: 8, padding: '9px 12px', color: '#64748b', fontSize: 13, cursor: 'pointer', textAlign: 'left' }}
+            style={{ width: '100%', background: 'transparent', border: `1px solid ${theme.border}`, borderRadius: 8, padding: '9px 12px', color: theme.textDim, fontSize: 13, cursor: 'pointer', textAlign: 'left' }}
           >
             Sair
           </button>
@@ -137,7 +135,8 @@ export default function Layout({ children }) {
           >
             {menuOpen ? '✕' : '☰'}
           </button>
-          <span className="admin-mobile-title">CNH Admin</span>
+          <img src="/logo-phoenix.png" alt="" style={{ height: 28, objectFit: 'contain' }} />
+          <span className="admin-mobile-title">Cupula Fenix</span>
         </header>
 
         <main className="admin-main">

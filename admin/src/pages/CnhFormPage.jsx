@@ -200,8 +200,8 @@ function ImageUpload({ label, hint, value, onChange, previewStyle, isDefault }) 
         <div style={{
           width: previewStyle?.width ?? 100,
           height: previewStyle?.height ?? 130,
-          background: '#0f1117',
-          border: '1px dashed #2d3748',
+          background: '#0a0908',
+          border: '1px dashed #3a2820',
           borderRadius: 8,
           overflow: 'hidden',
           display: 'flex',
@@ -215,15 +215,15 @@ function ImageUpload({ label, hint, value, onChange, previewStyle, isDefault }) 
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <label style={{
-            background: '#4f8ef720', border: '1px solid #4f8ef740', borderRadius: 8,
-            padding: '8px 14px', color: '#4f8ef7', fontSize: 12, cursor: 'pointer', fontWeight: 600, textAlign: 'center',
+            background: '#FF6B0020', border: '1px solid #FF6B0040', borderRadius: 8,
+            padding: '8px 14px', color: '#FF6B00', fontSize: 12, cursor: 'pointer', fontWeight: 600, textAlign: 'center',
           }}>
             📷 Escolher imagem
             <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp" onChange={handleFile} style={{ display: 'none' }} />
           </label>
           {value && !isDefault && (
             <button type="button" onClick={() => onChange('')} style={{
-              background: 'transparent', border: '1px solid #2d3748', borderRadius: 8,
+              background: 'transparent', border: '1px solid #3a2820', borderRadius: 8,
               padding: '6px 12px', color: '#64748b', fontSize: 12, cursor: 'pointer',
             }}>
               Remover
@@ -279,7 +279,7 @@ export default function CnhFormPage() {
     <Layout>
       <div style={{ maxWidth: 760, width: '100%' }}>
         <div className="admin-form-header">
-          <button onClick={() => navigate(-1)} style={{ background: '#1a1d27', border: '1px solid #2d3748', borderRadius: 8, padding: '8px 14px', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}>← Voltar</button>
+          <button onClick={() => navigate(-1)} style={{ background: '#161210', border: '1px solid #3a2820', borderRadius: 8, padding: '8px 14px', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}>← Voltar</button>
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: '#f1f5f9' }}>{isEdit ? 'Editar CNH' : 'Nova CNH'}</h1>
             <p style={{ color: '#64748b', fontSize: 13, marginTop: 2 }}>
@@ -290,7 +290,7 @@ export default function CnhFormPage() {
 
         <form onSubmit={handleSubmit}>
           {/* Foto e assinatura */}
-          <div className="admin-grid-2" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', padding: '24px 28px', marginBottom: 20 }}>
+          <div className="admin-grid-2" style={{ background: '#161210', borderRadius: 12, border: '1px solid #3a2820', padding: '24px 28px', marginBottom: 20 }}>
             <ImageUpload
               label="Foto 3x4"
               hint="Retrato vertical — padrão até enviar outra"
@@ -308,9 +308,9 @@ export default function CnhFormPage() {
             />
           </div>
 
-          <div className="admin-grid-2" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', padding: '28px 28px' }}>
+          <div className="admin-grid-2" style={{ background: '#161210', borderRadius: 12, border: '1px solid #3a2820', padding: '28px 28px' }}>
             {FIELDS.map((f, idx) => (
-              <div key={f.key} style={f.key.startsWith('mrz') ? { gridColumn: '1 / -1' } : f.key === 'pin' ? { gridColumn: '1 / -1', background: '#1e2536', borderRadius: 10, padding: '16px 20px', border: '1px solid #4f8ef740' } : {}}>
+              <div key={f.key} style={f.key.startsWith('mrz') ? { gridColumn: '1 / -1' } : f.key === 'pin' ? { gridColumn: '1 / -1', background: '#221816', borderRadius: 10, padding: '16px 20px', border: '1px solid #FF6B0040' } : {}}>
                 {f.key === 'mrz1' && (
                   <div className="admin-mrz-header">
                     <span style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>MRZ — Machine Readable Zone</span>
@@ -320,27 +320,27 @@ export default function CnhFormPage() {
                         const mrz = generateMrz(form)
                         setForm(f => ({ ...f, ...mrz }))
                       }}
-                      style={{ background: '#4f8ef720', border: '1px solid #4f8ef740', borderRadius: 8, padding: '7px 16px', color: '#4f8ef7', fontSize: 12, cursor: 'pointer', fontWeight: 600 }}
+                      style={{ background: '#FF6B0020', border: '1px solid #FF6B0040', borderRadius: 8, padding: '7px 16px', color: '#FF6B00', fontSize: 12, cursor: 'pointer', fontWeight: 600 }}
                     >
                       ⟳ Gerar MRZ automático
                     </button>
                   </div>
                 )}
-                <label style={{ display: 'block', fontSize: 11, color: f.key === 'pin' ? '#4f8ef7' : '#64748b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: f.key === 'pin' ? 700 : 400 }}>{f.label}</label>
+                <label style={{ display: 'block', fontSize: 11, color: f.key === 'pin' ? '#FF6B00' : '#64748b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: f.key === 'pin' ? 700 : 400 }}>{f.label}</label>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <input
                     value={form[f.key] || ''}
                     onChange={e => set(f.key, applyMask(f.mask, e.target.value))}
                     placeholder={f.placeholder}
                     inputMode={f.inputMode || (f.key === 'pin' ? 'numeric' : 'text')}
-                    style={{ flex: 1, width: f.key === 'pin' ? 120 : '100%', background: '#0f1117', border: `1px solid ${f.key === 'pin' ? '#4f8ef7' : '#2d3748'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: f.key === 'pin' ? 22 : 14, outline: 'none', fontFamily: f.key.startsWith('mrz') || f.key === 'pin' || f.mask === 'cpf' || f.mask === 'date' ? 'monospace' : 'inherit', letterSpacing: f.key === 'pin' ? '0.3em' : 'normal' }}
+                    style={{ flex: 1, width: f.key === 'pin' ? 120 : '100%', background: '#0a0908', border: `1px solid ${f.key === 'pin' ? '#FF6B00' : '#3a2820'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: f.key === 'pin' ? 22 : 14, outline: 'none', fontFamily: f.key.startsWith('mrz') || f.key === 'pin' || f.mask === 'cpf' || f.mask === 'date' ? 'monospace' : 'inherit', letterSpacing: f.key === 'pin' ? '0.3em' : 'normal' }}
                   />
                   {f.autoGen && (
                     <button
                       type="button"
                       onClick={() => set(f.key, applyMask(f.mask, f.autoGen()))}
                       title="Gerar aleatório"
-                      style={{ flexShrink: 0, background: '#2d3748', border: 'none', borderRadius: 8, padding: '10px 14px', color: '#94a3b8', fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 500 }}
+                      style={{ flexShrink: 0, background: '#3a2820', border: 'none', borderRadius: 8, padding: '10px 14px', color: '#94a3b8', fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 500 }}
                     >
                       ⟳ Gerar
                     </button>
@@ -358,14 +358,14 @@ export default function CnhFormPage() {
             <button
               type="submit"
               disabled={saving}
-              style={{ background: '#4f8ef7', color: '#fff', border: 'none', borderRadius: 10, padding: '12px 32px', fontWeight: 700, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
+              style={{ background: '#FF6B00', color: '#fff', border: 'none', borderRadius: 10, padding: '12px 32px', fontWeight: 700, fontSize: 14, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}
             >
               {saving ? 'Salvando...' : isEdit ? 'Salvar alterações' : 'Criar CNH'}
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              style={{ background: 'transparent', border: '1px solid #2d3748', color: '#94a3b8', borderRadius: 10, padding: '12px 24px', fontSize: 14, cursor: 'pointer' }}
+              style={{ background: 'transparent', border: '1px solid #3a2820', color: '#94a3b8', borderRadius: 10, padding: '12px 24px', fontSize: 14, cursor: 'pointer' }}
             >
               Cancelar
             </button>

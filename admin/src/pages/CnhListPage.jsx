@@ -60,7 +60,7 @@ export default function CnhListPage() {
         </div>
         <button
           onClick={() => navigate('/novo')}
-          style={{ background: '#4f8ef7', color: '#fff', border: 'none', borderRadius: 10, padding: '11px 22px', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}
+          style={{ background: '#FF6B00', color: '#fff', border: 'none', borderRadius: 10, padding: '11px 22px', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}
         >
           + Nova CNH
         </button>
@@ -72,15 +72,15 @@ export default function CnhListPage() {
           value={q}
           onChange={e => setQ(e.target.value)}
           placeholder="Buscar por nome, CPF ou registro..."
-          style={{ width: '100%', maxWidth: 440, background: '#1a1d27', border: '1px solid #2d3748', borderRadius: 8, padding: '11px 16px', color: '#e2e8f0', fontSize: 14, outline: 'none' }}
+          style={{ width: '100%', maxWidth: 440, background: '#161210', border: '1px solid #3a2820', borderRadius: 8, padding: '11px 16px', color: '#e2e8f0', fontSize: 14, outline: 'none' }}
         />
       </div>
 
       {/* Table */}
-      <div className="admin-table-scroll" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', overflow: 'hidden' }}>
+      <div className="admin-table-scroll" style={{ background: '#161210', borderRadius: 12, border: '1px solid #3a2820', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid #2d3748' }}>
+            <tr style={{ borderBottom: '1px solid #3a2820' }}>
               {['Nome', 'CPF', 'Registro', 'Cat.', 'Validade', 'Expira em', 'Ações'].map(h => (
                 <th key={h} style={{ padding: '14px 18px', textAlign: 'left', color: '#64748b', fontWeight: 600, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{h}</th>
               ))}
@@ -96,13 +96,13 @@ export default function CnhListPage() {
             {cnhs.map((c, i) => (
               <tr
                 key={c.id}
-                style={{ borderBottom: i < cnhs.length - 1 ? '1px solid #1e2536' : 'none', background: 'transparent' }}
+                style={{ borderBottom: i < cnhs.length - 1 ? '1px solid #221816' : 'none', background: 'transparent' }}
               >
                 <td style={{ padding: '14px 18px', color: '#f1f5f9', fontWeight: 500 }}>{c.nome || '—'}</td>
                 <td style={{ padding: '14px 18px', color: '#94a3b8' }}>{c.cpf || '—'}</td>
                 <td style={{ padding: '14px 18px', color: '#94a3b8', fontFamily: 'monospace' }}>{c.registro || '—'}</td>
                 <td style={{ padding: '14px 18px' }}>
-                  <span style={{ background: '#4f8ef720', color: '#4f8ef7', borderRadius: 6, padding: '3px 10px', fontWeight: 600, fontSize: 12 }}>{c.catHab || '—'}</span>
+                  <span style={{ background: '#FF6B0020', color: '#FF6B00', borderRadius: 6, padding: '3px 10px', fontWeight: 600, fontSize: 12 }}>{c.catHab || '—'}</span>
                 </td>
                 <td style={{ padding: '14px 18px', color: '#94a3b8' }}>{c.validade || '—'}</td>
                 <td style={{ padding: '14px 18px', color: expiryColor(daysUntil(c.expires_at)), fontSize: 12 }}>
@@ -117,7 +117,7 @@ export default function CnhListPage() {
                   <div style={{ display: 'flex', gap: 8 }}>
                     <button
                       onClick={() => navigate(`/cnhs/${c.id}`)}
-                      style={{ background: '#4f8ef720', color: '#4f8ef7', border: 'none', borderRadius: 6, padding: '6px 12px', fontSize: 12, cursor: 'pointer', fontWeight: 500 }}
+                      style={{ background: '#FF6B0020', color: '#FF6B00', border: 'none', borderRadius: 6, padding: '6px 12px', fontSize: 12, cursor: 'pointer', fontWeight: 500 }}
                     >
                       Ver
                     </button>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../utils/api.js'
+import theme from '../styles/theme.js'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -26,20 +27,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f1117' }}>
-      <div className="admin-login-card" style={{ background: '#1a1d27', borderRadius: 16, width: '100%', maxWidth: 400, boxShadow: '0 8px 40px rgba(0,0,0,0.4)' }}>
-
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px' }}>
-            <span style={{ color: '#4f8ef7' }}>CNH</span>
-            <span style={{ color: '#e2e8f0' }}> Admin</span>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.bgMain }}>
+      <div
+        className="admin-login-card"
+        style={{
+          background: theme.bgCard,
+          borderRadius: 16,
+          width: '100%',
+          maxWidth: 400,
+          border: `1px solid ${theme.border}`,
+          boxShadow: '0 12px 48px rgba(229, 57, 53, 0.12)',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 32, textAlign: 'center' }}>
+          <img src="/logo-phoenix.png" alt="Cupula Fenix" style={{ height: 80, objectFit: 'contain', marginBottom: 16 }} />
+          <div style={{ fontSize: 22, fontWeight: 800, color: theme.text }}>
+            Cupula <span style={{ color: theme.accentGold }}>Fenix</span>
           </div>
-          <div style={{ color: '#64748b', fontSize: 14, marginTop: 6 }}>Painel de controle</div>
+          <div style={{ color: theme.textDim, fontSize: 14, marginTop: 6 }}>Painel de controle</div>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
-            <label style={{ display: 'block', fontSize: 12, color: '#94a3b8', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Usuário</label>
+            <label style={labelStyle}>Usuário</label>
             <input
               value={username}
               onChange={e => setUsername(e.target.value)}
@@ -50,7 +60,7 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label style={{ display: 'block', fontSize: 12, color: '#94a3b8', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Senha</label>
+            <label style={labelStyle}>Senha</label>
             <input
               type="password"
               value={password}
@@ -68,11 +78,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ background: '#4f8ef7', color: '#fff', border: 'none', borderRadius: 10, padding: '13px 0', fontWeight: 700, fontSize: 15, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, marginTop: 4 }}
-          >
+          <button type="submit" disabled={loading} style={btnStyle(loading)}>
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
@@ -81,13 +87,37 @@ export default function LoginPage() {
   )
 }
 
+const labelStyle = {
+  display: 'block',
+  fontSize: 12,
+  color: theme.textMuted,
+  marginBottom: 6,
+  textTransform: 'uppercase',
+  letterSpacing: '0.06em',
+}
+
 const inputStyle = {
   width: '100%',
-  background: '#0f1117',
-  border: '1px solid #2d3748',
+  background: theme.bgMain,
+  border: `1px solid ${theme.border}`,
   borderRadius: 8,
   padding: '11px 14px',
-  color: '#e2e8f0',
+  color: theme.text,
   fontSize: 15,
   outline: 'none',
+}
+
+function btnStyle(loading) {
+  return {
+    background: theme.gradient,
+    color: '#fff',
+    border: 'none',
+    borderRadius: 10,
+    padding: '13px 0',
+    fontWeight: 700,
+    fontSize: 15,
+    cursor: loading ? 'not-allowed' : 'pointer',
+    opacity: loading ? 0.7 : 1,
+    marginTop: 4,
+  }
 }

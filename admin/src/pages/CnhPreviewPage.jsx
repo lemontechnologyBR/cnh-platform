@@ -28,7 +28,7 @@ export default function CnhPreviewPage() {
       <div className="admin-split">
         <div className="admin-split__main">
           <div className="admin-form-header" style={{ marginBottom: 24 }}>
-            <button onClick={() => navigate('/cnhs')} style={{ background: '#1a1d27', border: '1px solid #2d3748', borderRadius: 8, padding: '8px 14px', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}>← Voltar</button>
+            <button onClick={() => navigate('/cnhs')} style={{ background: '#161210', border: '1px solid #3a2820', borderRadius: 8, padding: '8px 14px', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}>← Voltar</button>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: '#f1f5f9' }}>{cnh.nome || '—'}</h1>
           </div>
 
@@ -47,7 +47,7 @@ export default function CnhPreviewPage() {
             </button>
           </div>
 
-          <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', overflow: 'hidden' }}>
+          <div style={{ background: '#161210', borderRadius: 12, border: '1px solid #3a2820', overflow: 'hidden' }}>
             {[
               ['CPF', cnh.cpf],
               ['Registro', cnh.registro],
@@ -74,7 +74,7 @@ export default function CnhPreviewPage() {
               <div
                 key={label}
                 className="admin-info-row"
-                style={{ borderBottom: i < arr.length - 1 ? '1px solid #1e2536' : 'none' }}
+                style={{ borderBottom: i < arr.length - 1 ? '1px solid #221816' : 'none' }}
               >
                 <span className="admin-info-row__label" style={{ fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
                 <span style={{ fontSize: 13, color: '#e2e8f0', fontFamily: label.startsWith('MRZ') || label === 'Cert.' ? 'monospace' : 'inherit' }}>{value || '—'}</span>

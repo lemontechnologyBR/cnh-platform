@@ -1,3 +1,16 @@
+/* Cupula Fenix — tema phoenix */
+:root {
+  --fx-bg: #0a0908;
+  --fx-card: #161210;
+  --fx-sidebar: #110e0c;
+  --fx-border: #3a2820;
+  --fx-accent: #FF6B00;
+  --fx-accent-gold: #FFB800;
+  --fx-accent-red: #E53935;
+  --fx-text: #f5ebe6;
+  --fx-text-muted: #9a8478;
+}
+
 /* ── Shell & sidebar ─────────────────────────────────────────────────────── */
 .admin-shell {
   display: flex;
@@ -7,11 +20,11 @@
 
 .admin-sidebar {
   width: 220px;
-  background: #1a1d27;
+  background: var(--fx-sidebar);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  border-right: 1px solid #2d3748;
+  border-right: 1px solid var(--fx-border);
   z-index: 200;
 }
 
@@ -27,20 +40,20 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: #1a1d27;
-  border-bottom: 1px solid #2d3748;
+  background: var(--fx-sidebar);
+  border-bottom: 1px solid var(--fx-border);
   position: sticky;
   top: 0;
   z-index: 50;
 }
 
 .admin-menu-btn {
-  background: #0f1117;
-  border: 1px solid #2d3748;
+  background: var(--fx-bg);
+  border: 1px solid var(--fx-border);
   border-radius: 8px;
   width: 40px;
   height: 40px;
-  color: #e2e8f0;
+  color: var(--fx-text);
   font-size: 20px;
   cursor: pointer;
   display: flex;
@@ -52,7 +65,7 @@
 .admin-mobile-title {
   font-size: 16px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--fx-text);
 }
 
 .admin-overlay {
@@ -63,7 +76,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 32px 36px;
-  background: #0f1117;
+  background: var(--fx-bg);
 }
 
 /* ── Layout utilities ────────────────────────────────────────────────────── */

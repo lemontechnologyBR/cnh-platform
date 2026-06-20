@@ -63,7 +63,7 @@ export default function RechargesAdminPage() {
         </div>
         <button
           onClick={() => setEditSettings(v => !v)}
-          style={{ background: '#1a1d27', border: '1px solid #2d3748', borderRadius: 8, padding: '9px 18px', color: '#94a3b8', fontSize: 13, cursor: 'pointer' }}
+          style={{ background: '#161210', border: '1px solid #3a2820', borderRadius: 8, padding: '9px 18px', color: '#94a3b8', fontSize: 13, cursor: 'pointer' }}
         >
           ⚙ Configurar PIX
         </button>
@@ -71,7 +71,7 @@ export default function RechargesAdminPage() {
 
       {/* Settings panel */}
       {editSettings && settings && (
-        <div style={{ background: '#1a1d27', border: '1px solid #4f8ef740', borderRadius: 12, padding: '20px 24px', marginBottom: 24 }}>
+        <div style={{ background: '#161210', border: '1px solid #FF6B0040', borderRadius: 12, padding: '20px 24px', marginBottom: 24 }}>
           <div style={{ fontWeight: 600, color: '#f1f5f9', marginBottom: 16 }}>Configurações PIX</div>
           <div className="admin-settings-grid">
             <div>
@@ -80,7 +80,7 @@ export default function RechargesAdminPage() {
                 value={settingsForm.pixKey || ''}
                 onChange={e => setSettingsForm(s => ({ ...s, pixKey: e.target.value }))}
                 placeholder="email@exemplo.com ou CPF"
-                style={{ width: '100%', background: '#0f1117', border: '1px solid #2d3748', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', background: '#0a0908', border: '1px solid #3a2820', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
             <div>
@@ -89,7 +89,7 @@ export default function RechargesAdminPage() {
                 value={settingsForm.pixName || ''}
                 onChange={e => setSettingsForm(s => ({ ...s, pixName: e.target.value }))}
                 placeholder="Nome do recebedor"
-                style={{ width: '100%', background: '#0f1117', border: '1px solid #2d3748', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', background: '#0a0908', border: '1px solid #3a2820', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
           <div>
@@ -98,7 +98,7 @@ export default function RechargesAdminPage() {
               type="number"
               value={settingsForm.priceCnh ?? 50}
               onChange={e => setSettingsForm(s => ({ ...s, priceCnh: +e.target.value }))}
-              style={{ width: '100%', background: '#0f1117', border: '1px solid #2d3748', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+              style={{ width: '100%', background: '#0a0908', border: '1px solid #3a2820', borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
             />
           </div>
           <div>
@@ -109,7 +109,7 @@ export default function RechargesAdminPage() {
               max="1000"
               value={settingsForm.rechargeBonus ?? 50}
               onChange={e => setSettingsForm(s => ({ ...s, rechargeBonus: +e.target.value }))}
-              style={{ width: '100%', background: '#0f1117', border: `1px solid ${(settingsForm.rechargeBonus ?? 0) > 0 ? '#34d39840' : '#2d3748'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
+              style={{ width: '100%', background: '#0a0908', border: `1px solid ${(settingsForm.rechargeBonus ?? 0) > 0 ? '#34d39840' : '#3a2820'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
             />
             <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>
               {(settingsForm.rechargeBonus ?? 0) > 0
@@ -124,17 +124,17 @@ export default function RechargesAdminPage() {
               onChange={e => setSettingsForm(s => ({ ...s, mpAccessToken: e.target.value }))}
               placeholder="APP_USR-... (produção) ou TEST-... (testes)"
               type="password"
-              style={{ width: '100%', background: '#0f1117', border: `1px solid ${settingsForm.mpAccessToken ? '#34d39840' : '#2d3748'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: 'monospace' }}
+              style={{ width: '100%', background: '#0a0908', border: `1px solid ${settingsForm.mpAccessToken ? '#34d39840' : '#3a2820'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: 'monospace' }}
             />
             <div style={{ fontSize: 11, color: '#475569', marginTop: 4 }}>
-              Obtenha em: <a href="https://www.mercadopago.com.br/developers/panel/app" target="_blank" rel="noreferrer" style={{ color: '#4f8ef7' }}>mercadopago.com.br/developers</a> · Webhook URL: <code style={{ color: '#94a3b8' }}>{window.location.origin.replace('5174', '3001')}/api/recharges/webhook</code>
+              Obtenha em: <a href="https://www.mercadopago.com.br/developers/panel/app" target="_blank" rel="noreferrer" style={{ color: '#FF6B00' }}>mercadopago.com.br/developers</a> · Webhook URL: <code style={{ color: '#94a3b8' }}>{window.location.origin.replace('5174', '3001')}/api/recharges/webhook</code>
             </div>
             </div>
           </div>
           <button
             onClick={saveSettingsHandler}
             disabled={savingSettings}
-            style={{ marginTop: 14, background: '#4f8ef7', border: 'none', borderRadius: 8, padding: '10px 24px', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer', opacity: savingSettings ? 0.6 : 1 }}
+            style={{ marginTop: 14, background: '#FF6B00', border: 'none', borderRadius: 8, padding: '10px 24px', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer', opacity: savingSettings ? 0.6 : 1 }}
           >
             {savingSettings ? 'Salvando...' : 'Salvar configurações'}
           </button>
@@ -143,20 +143,20 @@ export default function RechargesAdminPage() {
 
       {/* Stats */}
       <div className="admin-stat-row" style={{ marginBottom: 24 }}>
-        <div style={{ background: '#1a1d27', borderRadius: 12, padding: '18px 22px', border: '1px solid #f59e0b40', flex: 1 }}>
+        <div style={{ background: '#161210', borderRadius: 12, padding: '18px 22px', border: '1px solid #f59e0b40', flex: 1 }}>
           <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>Pendentes</div>
           <div style={{ fontSize: 30, fontWeight: 800, color: '#f59e0b' }}>{data.pending}</div>
         </div>
-        <div style={{ background: '#1a1d27', borderRadius: 12, padding: '18px 22px', border: '1px solid #2d3748', flex: 1 }}>
+        <div style={{ background: '#161210', borderRadius: 12, padding: '18px 22px', border: '1px solid #3a2820', flex: 1 }}>
           <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>Valor pendente</div>
           <div style={{ fontSize: 30, fontWeight: 800, color: '#f59e0b' }}>{fmt(totalPending)}</div>
         </div>
-        <div style={{ background: '#1a1d27', borderRadius: 12, padding: '18px 22px', border: '1px solid #2d3748', flex: 1 }}>
+        <div style={{ background: '#161210', borderRadius: 12, padding: '18px 22px', border: '1px solid #3a2820', flex: 1 }}>
           <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>Total de recargas</div>
-          <div style={{ fontSize: 30, fontWeight: 800, color: '#4f8ef7' }}>{data.recharges.length}</div>
+          <div style={{ fontSize: 30, fontWeight: 800, color: '#FF6B00' }}>{data.recharges.length}</div>
         </div>
         {settings && (
-          <div style={{ background: '#1a1d27', borderRadius: 12, padding: '18px 22px', border: '1px solid #2d3748', flex: 1 }}>
+          <div style={{ background: '#161210', borderRadius: 12, padding: '18px 22px', border: '1px solid #3a2820', flex: 1 }}>
             <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>Preço por CNH</div>
             <div style={{ fontSize: 30, fontWeight: 800, color: '#a78bfa' }}>{fmt(settings.priceCnh)}</div>
           </div>
@@ -168,8 +168,8 @@ export default function RechargesAdminPage() {
         {[['pending', 'Pendentes'], ['approved', 'Aprovadas'], ['rejected', 'Rejeitadas'], ['all', 'Todas']].map(([v, l]) => (
           <button key={v} onClick={() => setFilter(v)} style={{
             flex: 1, background: 'none', border: 'none',
-            borderBottom: `2px solid ${filter === v ? '#4f8ef7' : 'transparent'}`,
-            color: filter === v ? '#4f8ef7' : '#64748b', padding: '12px 0',
+            borderBottom: `2px solid ${filter === v ? '#FF6B00' : 'transparent'}`,
+            color: filter === v ? '#FF6B00' : '#64748b', padding: '12px 0',
             cursor: 'pointer', fontSize: 13, fontWeight: filter === v ? 600 : 400,
           }}>
             {l}
@@ -183,8 +183,8 @@ export default function RechargesAdminPage() {
       </div>
 
       {/* Table */}
-      <div className="admin-data-grid-wrap" style={{ background: '#1a1d27', borderRadius: '0 0 12px 12px', border: '1px solid #2d3748' }}>
-        <div className="admin-grid-form admin-grid-header" style={{ display: 'grid', padding: '10px 20px', fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #2d3748' }}>
+      <div className="admin-data-grid-wrap" style={{ background: '#161210', borderRadius: '0 0 12px 12px', border: '1px solid #3a2820' }}>
+        <div className="admin-grid-form admin-grid-header" style={{ display: 'grid', padding: '10px 20px', fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #3a2820' }}>
           <span>Operador</span>
           <span>Valor</span>
           <span>Status</span>
@@ -196,7 +196,7 @@ export default function RechargesAdminPage() {
         {list.length === 0
           ? <div style={{ padding: '40px 20px', textAlign: 'center', color: '#475569', fontSize: 14 }}>Nenhuma recarga {filter !== 'all' ? STATUS_LABEL[filter]?.toLowerCase() : ''}</div>
           : list.map(r => (
-            <div key={r.id} className="admin-grid-form" style={{ display: 'grid', padding: '14px 20px', borderBottom: '1px solid #1e2536' }}>
+            <div key={r.id} className="admin-grid-form" style={{ display: 'grid', padding: '14px 20px', borderBottom: '1px solid #221816' }}>
               <div style={{ fontWeight: 600, color: '#f1f5f9', fontSize: 14 }}>{r.userName}</div>
               <div style={{ fontWeight: 700, fontSize: 15, color: '#e2e8f0' }}>{fmt(r.amount)}</div>
               <div>
@@ -206,8 +206,8 @@ export default function RechargesAdminPage() {
               </div>
               <div style={{ color: '#64748b', fontSize: 11, fontFamily: 'monospace' }}>
                 {r.mpPaymentId
-                  ? <a href={`https://www.mercadopago.com.br/activities/detail?id=${r.mpPaymentId}`} target="_blank" rel="noreferrer" style={{ color: '#4f8ef7' }}>#{r.mpPaymentId}</a>
-                  : <span style={{ color: '#2d3748' }}>manual</span>}
+                  ? <a href={`https://www.mercadopago.com.br/activities/detail?id=${r.mpPaymentId}`} target="_blank" rel="noreferrer" style={{ color: '#FF6B00' }}>#{r.mpPaymentId}</a>
+                  : <span style={{ color: '#3a2820' }}>manual</span>}
               </div>
               <div style={{ color: '#64748b', fontSize: 12 }}>{new Date(r.created_at).toLocaleString('pt-BR')}</div>
               <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>

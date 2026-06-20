@@ -114,13 +114,13 @@ export default function CnhPdfPreview({ data }) {
           <button
             key={s}
             onClick={() => setSide(s)}
-            style={{ padding: '7px 18px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600, background: side === s ? '#4f8ef7' : '#1a1d27', color: side === s ? '#fff' : '#94a3b8' }}
+            style={{ padding: '7px 18px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600, background: side === s ? '#FF6B00' : '#161210', color: side === s ? '#fff' : '#94a3b8' }}
           >
             {s.charAt(0).toUpperCase() + s.slice(1)}
           </button>
         ))}
       </div>
-      <div style={{ maxWidth: 340, background: '#1a1d27', borderRadius: 10, padding: 12, border: '1px solid #2d3748' }}>
+      <div style={{ maxWidth: 340, background: '#161210', borderRadius: 10, padding: 12, border: '1px solid #3a2820' }}>
         <CardCanvas side={side} data={data} />
       </div>
     </div>
