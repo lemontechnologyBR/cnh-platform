@@ -17,6 +17,7 @@ import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
 import { buildConsultaUrl, getRegistroForConsulta } from './consultaUrl.js'
 import { CNH_QR_PDF_OPTIONS } from './cnhQrConfig.js'
+import { getCnhToken } from './cnhUser.js'
 
 export const LUIS_PDF_URL = '/cnh_luis.pdf'
 export const DEFAULT_FOTO_URL = '/foto_padrao_3x4.png'
@@ -419,12 +420,6 @@ function isMobileDevice() {
     || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 }
 
-function isIOSDevice() {
-  const ua = navigator.userAgent
-  return /iPhone|iPad|iPod/i.test(ua)
-    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-}
-
 function toPdfBlob(bytes) {
   const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)
   return new Blob([buffer], { type: 'application/pdf' })
@@ -441,18 +436,6 @@ function triggerAnchorDownload(url, filename) {
   link.remove()
 }
 
-function showPdfInWindow(win, url) {
-  if (!win || win.closed) {
-    window.location.assign(url)
-    return
-  }
-  try {
-    win.location.replace(url)
-  } catch {
-    window.location.assign(url)
-  }
-}
-
 function writeLoadingPage(win) {
   if (!win || win.closed) return
   try {
@@ -463,7 +446,7 @@ function writeLoadingPage(win) {
       + '<p style="text-align:center;margin-top:45vh;color:#555">Gerando PDF...</p></body></html>',
     )
     win.document.close()
-  } catch { /* popup blocked or cross-origin */ }
+  } catch { /* popup blocked */ }
 }
 
 /** Chamar no clique (síncrono) antes do await — mantém permissão no mobile */
@@ -474,50 +457,52 @@ export function preparePdfDownloadWindow() {
   return win
 }
 
-async function tryNativeShare(blob, filename) {
-  const file = new File([blob], filename, { type: 'application/pdf' })
-  if (!navigator.canShare?.({ files: [file] })) return false
-  try {
-    await navigator.share({ files: [file], title: 'CNH Digital' })
-    return true
-  } catch (err) {
-    return err?.name === 'AbortError'
+async function uploadPdfForDownload(bytes, filename) {
+  const token = getCnhToken()
+  if (!token) return null
+  const res = await fetch('/api/public/cnh/pdf-store', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/pdf',
+      'X-Filename': encodeURIComponent(filename),
+    },
+    body: bytes,
+  })
+  if (!res.ok) return null
+  const data = await res.json()
+  return `${window.location.origin}${data.url}`
+}
+
+function openDownloadUrl(absUrl, preOpenedWindow) {
+  if (preOpenedWindow && !preOpenedWindow.closed) {
+    preOpenedWindow.location.replace(absUrl)
+    return
   }
+  window.location.assign(absUrl)
 }
 
 /** Gera e baixa o PDF da CNH no dispositivo do usuário */
 export async function downloadCnhPdf(data = {}, preOpenedWindow = null) {
   const bytes = await generateCnhPdf(data)
   const filename = buildPdfFilename(data)
-  const blob = toPdfBlob(bytes)
-  const url = URL.createObjectURL(blob)
-  const cleanup = () => setTimeout(() => URL.revokeObjectURL(url), 120000)
 
-  // Desktop — download direto
-  if (!isMobileDevice()) {
-    triggerAnchorDownload(url, filename)
-    cleanup()
-    return
-  }
-
-  const ios = isIOSDevice()
-
-  // Android: share nativo abre "Salvar em Downloads" / Drive
-  if (!ios && (await tryNativeShare(blob, filename))) {
+  // Mobile: URL HTTPS real (evita blob: no iOS)
+  if (isMobileDevice()) {
+    try {
+      const absUrl = await uploadPdfForDownload(bytes, filename)
+      if (absUrl) {
+        openDownloadUrl(absUrl, preOpenedWindow)
+        return
+      }
+    } catch (err) {
+      console.error('upload pdf:', err)
+    }
     if (preOpenedWindow && !preOpenedWindow.closed) preOpenedWindow.close()
-    cleanup()
-    return
   }
 
-  // iOS / fallback: PDF na aba aberta no clique (Salvar via ícone do Safari)
-  if (ios || preOpenedWindow) {
-    showPdfInWindow(preOpenedWindow, url)
-    cleanup()
-    return
-  }
-
-  // Android fallback sem popup: download + nova aba
+  // Desktop (ou fallback mobile)
+  const url = URL.createObjectURL(toPdfBlob(bytes))
   triggerAnchorDownload(url, filename)
-  window.open(url, '_blank')
-  cleanup()
+  setTimeout(() => URL.revokeObjectURL(url), 120000)
 }

@@ -6,6 +6,7 @@ import authRouter, { JWT_SECRET } from './routes/auth.js'
 import cnhsRouter from './routes/cnhs.js'
 import usersRouter from './routes/users.js'
 import rechargesRouter from './routes/recharges.js'
+import pdfDownloadRouter from './pdfDownload.js'
 import { findCnhByCpf, findCnhByCpfAndRegistro, getCnhById, isCnhExpired, deleteCnh, getSettings, CNH_TTL_DAYS } from './db.js'
 
 const app = express()
@@ -15,6 +16,10 @@ const corsOrigins = process.env.CORS_ORIGINS
   : ['http://localhost:5174', 'http://127.0.0.1:5174', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8080', 'http://127.0.0.1:8080']
 
 app.use(cors({ origin: corsOrigins }))
+
+// Upload binário do PDF (antes do express.json)
+app.use('/api/public/cnh', express.raw({ type: 'application/pdf', limit: '12mb' }), pdfDownloadRouter)
+
 app.use(express.json({ limit: '15mb' }))
 
 app.use('/api/auth',      authRouter)
