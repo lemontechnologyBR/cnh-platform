@@ -3,7 +3,7 @@ WORKDIR /app
 COPY admin/package.json admin/package-lock.json ./
 RUN npm ci
 COPY admin/ ./
-RUN cp node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs public/pdf.worker.min.mjs
+RUN mkdir -p public && cp node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs public/pdf.worker.min.mjs
 ENV VITE_BASE=/
 RUN npm run build
 
