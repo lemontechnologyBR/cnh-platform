@@ -10,3 +10,7 @@ dist-ssr
 !.vscode/extensions.json
 admin/server/db.json
 /data/
+
+# Scripts locais de deploy VPS (nunca commitar — usar SSH manual)
+scripts/vps_*.py
+deploy-log.txt
