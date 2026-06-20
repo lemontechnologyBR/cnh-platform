@@ -12,8 +12,8 @@ function UserModal({ user, onClose, onDone }) {
   const isNew = !user
   const [form, setForm] = useState(
     user
-      ? { username: user.username, nome: user.nome || '', role: user.role, password: '' }
-      : { username: '', nome: '', role: 'operator', password: '' }
+      ? { username: user.username, role: user.role, password: '' }
+      : { username: '', role: 'operator', password: '' }
   )
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -40,7 +40,6 @@ function UserModal({ user, onClose, onDone }) {
         <h3 style={{ color: '#f1f5f9', marginBottom: 20, fontWeight: 700 }}>{isNew ? 'Novo Operador' : 'Editar Operador'}</h3>
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {[
-            { key: 'nome', label: 'Nome', placeholder: 'Nome completo' },
             { key: 'username', label: 'Usuário', placeholder: 'login' },
             { key: 'password', label: isNew ? 'Senha' : 'Nova senha (opcional)', placeholder: '••••••', type: 'password' },
           ].map(f => (
@@ -116,8 +115,8 @@ function WalletModal({ user, onClose, onDone }) {
       <div className="admin-modal-panel" style={{ background: '#1a1d27', borderRadius: 16, maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid #2d3748' }} onClick={e => e.stopPropagation()}>
         <div style={{ padding: '20px 24px', borderBottom: '1px solid #2d3748', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16, color: '#f1f5f9' }}>{user.nome || user.username}</div>
-            <div style={{ color: '#64748b', fontSize: 12, marginTop: 2 }}>@{user.username} · {ROLE_LABEL[user.role]}</div>
+            <div style={{ fontWeight: 700, fontSize: 16, color: '#f1f5f9' }}>@{user.username}</div>
+            <div style={{ color: '#64748b', fontSize: 12, marginTop: 2 }}>{ROLE_LABEL[user.role]}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: 22, fontWeight: 800, color: '#34d399' }}>{fmt(wallet?.saldo ?? user.saldo)}</div>
@@ -250,8 +249,7 @@ export default function UsersPage() {
           : users.map(u => (
             <div key={u.id} className="admin-grid-users" style={{ display: 'grid', padding: '14px 20px', borderBottom: '1px solid #1e2536' }}>
               <div>
-                <div style={{ fontWeight: 600, color: '#f1f5f9', fontSize: 14 }}>{u.nome || u.username}</div>
-                <div style={{ color: '#475569', fontSize: 12, marginTop: 1 }}>@{u.username}</div>
+                <div style={{ fontWeight: 600, color: '#f1f5f9', fontSize: 14 }}>@{u.username}</div>
               </div>
               <div>
                 <span style={{ background: u.role === 'superadmin' ? '#4f8ef720' : '#a78bfa20', color: u.role === 'superadmin' ? '#4f8ef7' : '#a78bfa', borderRadius: 99, padding: '3px 10px', fontSize: 11, fontWeight: 600 }}>
