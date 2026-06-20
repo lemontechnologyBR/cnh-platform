@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { buildConsultaUrl, fetchConsultaCnh, formatCpf, getRegistroForConsulta } from '../utils/consultaUrl.js'
+import { fetchConsultaCnh } from '../utils/consultaUrl.js'
+import { buildConsultaFields } from '../utils/consultaDisplay.js'
 import '../styles/senatran-consulta.css'
 
 export default function SenatranConsultaPage() {
@@ -56,10 +57,10 @@ export default function SenatranConsultaPage() {
   }
 
   const fotoSrc = cnh.foto || '/foto_padrao_3x4.png'
-  const qrcodeUrl = buildConsultaUrl(null, null, cnh)
+  const fields = buildConsultaFields(cnh)
 
   return (
-    <div className="senatran-page">
+    <div className="senatran-page senatran-page--scroll">
       <header className="senatran-header senatran-header--olive">
         <button type="button" className="senatran-header__btn" onClick={() => window.history.length > 1 ? navigate(-1) : null} aria-label="Voltar">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -86,29 +87,20 @@ export default function SenatranConsultaPage() {
       </div>
 
       <div className="senatran-fields">
-        <Field label="Nome" value={cnh.nome} />
-        <Field label="Nome Civil" value={cnh.nome} />
-        <Field label="Doc. Identidade/Órg. Emissor/UF" value={cnh.docIdentidade} />
-        <Field label="CPF" value={formatCpf(cnh.cpf)} />
-        <Field label="Data de Nascimento" value={cnh.nascimento} />
-        <Field label="Nº Registro" value={getRegistroForConsulta(cnh) || cnh.registro} />
-        <Field label="Categoria" value={cnh.catHab} />
-        <Field label="Validade" value={cnh.validade} />
-        <Field label="Data de Emissão" value={cnh.emissao} />
+        {fields.map(({ label, value }) => (
+          <Field key={label} label={label} value={value} />
+        ))}
       </div>
-
-      <p className="senatran-footnote">
-        Consulta pública · {qrcodeUrl.replace(/^https?:\/\//, '')}
-      </p>
     </div>
   )
 }
 
 function Field({ label, value }) {
+  const display = value != null && String(value).trim() !== '' ? value : ''
   return (
     <div className="senatran-field">
       <div className="senatran-field__label">{label}</div>
-      <div className="senatran-field__value">{value || '—'}</div>
+      <div className="senatran-field__value">{display}</div>
     </div>
   )
 }

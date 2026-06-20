@@ -110,12 +110,17 @@
   margin-bottom: 4px;
 }
 
+.senatran-page--scroll {
+  overflow-y: auto;
+}
+
 .senatran-field__value {
   font-size: 16px;
   font-weight: 700;
   color: #1a1a1a;
   text-transform: uppercase;
   line-height: 1.35;
+  min-height: 1.2em;
 }
 
 .senatran-vio-banner {

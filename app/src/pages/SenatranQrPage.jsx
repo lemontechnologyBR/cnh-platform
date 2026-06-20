@@ -63,7 +63,7 @@ export default function SenatranQrPage() {
       {!loading && !error && qrUrl && (
         <div className="senatran-qr-wrap">
           <div className="senatran-qr-box">
-            <QRCodeSVG value={qrUrl} size={340} level="H" includeMargin={true} />
+            <QRCodeSVG value={qrUrl} size={400} level="H" includeMargin={true} />
           </div>
         </div>
       )}

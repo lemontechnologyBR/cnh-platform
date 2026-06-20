@@ -4,15 +4,15 @@ import { buildConsultaUrl } from '../utils/consultaUrl.js'
 
 export default function CnhQrSlide({ data = {} }) {
   const wrapRef = useRef(null)
-  const [size, setSize] = useState(340)
+  const [size, setSize] = useState(400)
   const url = buildConsultaUrl(null, null, data)
 
   useEffect(() => {
     function updateSize() {
       const el = wrapRef.current
       if (!el) return
-      const w = el.clientWidth - 32
-      setSize(Math.min(Math.max(w, 300), 380))
+      const w = el.clientWidth - 8
+      setSize(Math.min(Math.max(w, 340), 440))
     }
     updateSize()
     window.addEventListener('resize', updateSize)
@@ -32,7 +32,7 @@ export default function CnhQrSlide({ data = {} }) {
       ref={wrapRef}
       style={{
         background: '#fff',
-        padding: '24px 16px',
+        padding: '16px 8px 20px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
