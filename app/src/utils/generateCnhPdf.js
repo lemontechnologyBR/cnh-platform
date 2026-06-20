@@ -27,6 +27,7 @@ const WHITE = rgb(1, 1, 1)
 // XObjects embutidos no cnh_luis.pdf (frente)
 const FOTO_IMAGE       = 'Image-7098480789'
 const ASSINATURA_IMAGE = 'Image-2000805986'
+const QR_IMAGE         = 'Image-7572533686'
 
 const pdfBytesCache = new Map()
 let fontBytesCache = null
@@ -88,16 +89,17 @@ function stripImageBlock(streamStr, imageName) {
   return streamStr.replace(re, '')
 }
 
-function stripTemplateImages(streamStr, { removeFoto, removeAssinatura }) {
+function stripTemplateImages(streamStr, { removeFoto, removeAssinatura, removeQr }) {
   let s = streamStr
   if (removeFoto) s = stripImageBlock(s, FOTO_IMAGE)
   if (removeAssinatura) s = stripImageBlock(s, ASSINATURA_IMAGE)
+  if (removeQr) s = stripImageBlock(s, QR_IMAGE)
   return s
 }
 
 // ─── Patch every content stream in the document ──────────────────────────────
 
-async function patchContentStreams(pdfDoc, imageOpts = { removeFoto: true, removeAssinatura: false }) {
+async function patchContentStreams(pdfDoc, imageOpts = { removeFoto: true, removeAssinatura: false, removeQr: true }) {
   const context = pdfDoc.context
 
   // Collect modifications first — avoids mutating the Map while iterating
@@ -132,7 +134,8 @@ async function patchContentStreams(pdfDoc, imageOpts = { removeFoto: true, remov
       streamStr.includes('/OCR-B')
     const hasTemplateImages =
       streamStr.includes(FOTO_IMAGE) ||
-      streamStr.includes(ASSINATURA_IMAGE)
+      streamStr.includes(ASSINATURA_IMAGE) ||
+      streamStr.includes(QR_IMAGE)
     if (!hasDataFonts && !hasTemplateImages) continue
 
     let cleaned = stripDataText(streamStr)
@@ -309,26 +312,22 @@ async function drawImages(page, pdfDoc, data) {
   }
 }
 
-// Região QR no verso (coords canvas scale=3 → pontos PDF)
-const QR_REGION = { x: 91 / 3, y: 842 - 1788 / 3 - 525 / 3, w: 726 / 3, h: 525 / 3 }
+// Posição real do QR no cnh_luis.pdf (Image-7572533686, 185×185 pt)
+const QR_REGION = { x: 340, y: 557, w: 185, h: 185 }
 
 async function drawQrCode(page, pdfDoc, data) {
   try {
     const url = buildConsultaUrl(data.cpf, data.registro)
-    const dataUrl = await QRCode.toDataURL(url, { margin: 0, width: 512, errorCorrectionLevel: 'M' })
+    const dataUrl = await QRCode.toDataURL(url, { margin: 1, width: 512, errorCorrectionLevel: 'M' })
     const parsed = dataUrlToBytes(dataUrl)
     if (!parsed) return
     const qrImg = await pdfDoc.embedPng(parsed.bytes)
     const { x, y, w, h } = QR_REGION
     maskArea(page, x, y, w, h)
-    const size = Math.min(w, h) * 0.92
-    page.drawImage(qrImg, {
-      x: x + (w - size) / 2,
-      y: y + (h - size) / 2,
-      width: size,
-      height: size,
-    })
-  } catch { /* QR opcional */ }
+    page.drawImage(qrImg, { x, y, width: w, height: h })
+  } catch (err) {
+    console.error('drawQrCode:', err)
+  }
 }
 
 // ─── Public API ──────────────────────────────────────────────────────────────
@@ -377,6 +376,7 @@ export async function generateCnhPdf(data) {
   await patchContentStreams(pdfDoc, {
     removeFoto: true,
     removeAssinatura: Boolean(merged.assinatura),
+    removeQr: true,
   })
 
   // ── 2. Escreve texto do Diego como primitivas PDF nativas ─────────────────

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CnhPdfCard from '../components/CnhPdfCard'
+import CnhQrSlide, { getCnhQrUrl } from '../components/CnhQrSlide'
 import { fetchCnhUser, loadCnhUserFromStorage } from '../utils/cnhUser.js'
 import { clearCnhPdfCache } from '../utils/generateCnhPdf.js'
 
@@ -70,7 +71,7 @@ export default function HabilitacaoPage() {
     if (id === 'frente') return <CnhPdfCard side="frente" data={cnhData} />
     if (id === 'verso')  return <CnhPdfCard side="verso"  data={cnhData} />
     if (id === 'mrz')    return <CnhPdfCard side="mrz"    data={cnhData} />
-    if (id === 'qr')     return <CnhPdfCard side="qr"     data={cnhData} />
+    if (id === 'qr')     return <CnhQrSlide data={cnhData} />
     return null
   }
 
@@ -139,7 +140,15 @@ export default function HabilitacaoPage() {
         {/* Botões de ação */}
         <div style={{ margin: '14px 14px 0', display: 'flex', flexDirection: 'column', gap: 6 }}>
           {acoes.map((item, i) => (
-            <button key={i} style={{
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                if (item.label === 'Copiar QR Code' && cnhData) {
+                  navigator.clipboard?.writeText(getCnhQrUrl(cnhData))
+                }
+              }}
+              style={{
               background: '#fff', border: 'none', borderRadius: 10,
               padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14,
               cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.07)', width: '100%',
