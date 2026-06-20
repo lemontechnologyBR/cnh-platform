@@ -277,8 +277,8 @@ export default function CnhFormPage() {
 
   return (
     <Layout>
-      <div style={{ maxWidth: 760 }}>
-        <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 16 }}>
+      <div style={{ maxWidth: 760, width: '100%' }}>
+        <div className="admin-form-header">
           <button onClick={() => navigate(-1)} style={{ background: '#1a1d27', border: '1px solid #2d3748', borderRadius: 8, padding: '8px 14px', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}>← Voltar</button>
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: '#f1f5f9' }}>{isEdit ? 'Editar CNH' : 'Nova CNH'}</h1>
@@ -290,7 +290,7 @@ export default function CnhFormPage() {
 
         <form onSubmit={handleSubmit}>
           {/* Foto e assinatura */}
-          <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', padding: '24px 28px', marginBottom: 20, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px 28px' }}>
+          <div className="admin-grid-2" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', padding: '24px 28px', marginBottom: 20 }}>
             <ImageUpload
               label="Foto 3x4"
               hint="Retrato vertical — padrão até enviar outra"
@@ -308,11 +308,11 @@ export default function CnhFormPage() {
             />
           </div>
 
-          <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', padding: '28px 28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 28px' }}>
+          <div className="admin-grid-2" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', padding: '28px 28px' }}>
             {FIELDS.map((f, idx) => (
               <div key={f.key} style={f.key.startsWith('mrz') ? { gridColumn: '1 / -1' } : f.key === 'pin' ? { gridColumn: '1 / -1', background: '#1e2536', borderRadius: 10, padding: '16px 20px', border: '1px solid #4f8ef740' } : {}}>
                 {f.key === 'mrz1' && (
-                  <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <div className="admin-mrz-header">
                     <span style={{ fontSize: 12, color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>MRZ — Machine Readable Zone</span>
                     <button
                       type="button"
@@ -354,7 +354,7 @@ export default function CnhFormPage() {
             <div style={{ background: '#2d1515', border: '1px solid #7f1d1d', borderRadius: 8, padding: '10px 16px', color: '#fca5a5', fontSize: 13, marginTop: 16 }}>{error}</div>
           )}
 
-          <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
+          <div className="admin-actions-row">
             <button
               type="submit"
               disabled={saving}

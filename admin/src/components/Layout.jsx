@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../utils/api.js'
+import '../styles/admin.css'
 
 function usePendingRecharges(isSuperadmin) {
   const [pending, setPending] = useState(0)
@@ -20,11 +21,22 @@ function fmt(v) {
 
 export default function Layout({ children }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [me, setMe] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     api.getMe().then(setMe).catch(() => {})
   }, [])
+
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
 
   const isSuperadmin = me?.role === 'superadmin'
   const pendingRecharges = usePendingRecharges(isSuperadmin)
@@ -50,9 +62,10 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar */}
-      <aside style={{ width: 220, background: '#1a1d27', display: 'flex', flexDirection: 'column', flexShrink: 0, borderRight: '1px solid #2d3748' }}>
+    <div className="admin-shell">
+      {menuOpen && <div className="admin-overlay" onClick={() => setMenuOpen(false)} aria-hidden="true" />}
+
+      <aside className={`admin-sidebar${menuOpen ? ' open' : ''}`}>
         <div style={{ padding: '24px 20px 20px' }}>
           <div style={{ fontSize: 20, fontWeight: 800 }}>
             <span style={{ color: '#4f8ef7' }}>CNH</span>
@@ -67,6 +80,7 @@ export default function Layout({ children }) {
               key={item.to}
               to={item.to}
               end={item.to === '/'}
+              onClick={() => setMenuOpen(false)}
               style={({ isActive }) => ({
                 display: 'flex',
                 alignItems: 'center',
@@ -92,7 +106,6 @@ export default function Layout({ children }) {
           ))}
         </nav>
 
-        {/* Saldo card — somente operadores */}
         {me && me.role !== 'superadmin' && (
           <div style={{ margin: '0 12px 12px', background: '#0f1117', borderRadius: 10, padding: '12px 14px', border: '1px solid #2d3748' }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: '#e2e8f0', marginBottom: 2 }}>{me.nome || me.username}</div>
@@ -114,10 +127,23 @@ export default function Layout({ children }) {
         </div>
       </aside>
 
-      {/* Main content */}
-      <main style={{ flex: 1, overflowY: 'auto', padding: '32px 36px', background: '#0f1117' }}>
-        {children}
-      </main>
+      <div className="admin-body">
+        <header className="admin-mobile-header">
+          <button
+            type="button"
+            className="admin-menu-btn"
+            onClick={() => setMenuOpen(v => !v)}
+            aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+          <span className="admin-mobile-title">CNH Admin</span>
+        </header>
+
+        <main className="admin-main">
+          {children}
+        </main>
+      </div>
     </div>
   )
 }

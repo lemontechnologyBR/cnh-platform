@@ -25,11 +25,9 @@ export default function CnhPreviewPage() {
 
   return (
     <Layout>
-      <div style={{ display: 'flex', gap: 40, alignItems: 'flex-start' }}>
-
-        {/* Left: info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div className="admin-split">
+        <div className="admin-split__main">
+          <div className="admin-form-header" style={{ marginBottom: 24 }}>
             <button onClick={() => navigate('/cnhs')} style={{ background: '#1a1d27', border: '1px solid #2d3748', borderRadius: 8, padding: '8px 14px', color: '#94a3b8', cursor: 'pointer', fontSize: 13 }}>← Voltar</button>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: '#f1f5f9' }}>{cnh.nome || '—'}</h1>
           </div>
@@ -75,17 +73,17 @@ export default function CnhPreviewPage() {
             ].map(([label, value], i, arr) => (
               <div
                 key={label}
-                style={{ display: 'flex', padding: '12px 20px', borderBottom: i < arr.length - 1 ? '1px solid #1e2536' : 'none', gap: 16, alignItems: 'center' }}
+                className="admin-info-row"
+                style={{ borderBottom: i < arr.length - 1 ? '1px solid #1e2536' : 'none' }}
               >
-                <span style={{ width: 140, flexShrink: 0, fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
+                <span className="admin-info-row__label" style={{ fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
                 <span style={{ fontSize: 13, color: '#e2e8f0', fontFamily: label.startsWith('MRZ') || label === 'Cert.' ? 'monospace' : 'inherit' }}>{value || '—'}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right: preview */}
-        <div style={{ width: 360, flexShrink: 0 }}>
+        <div className="admin-split__side">
           <div style={{ marginBottom: 12, color: '#64748b', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Preview do documento</div>
           <CnhPdfPreview data={cnh} />
         </div>

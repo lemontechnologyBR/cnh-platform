@@ -30,7 +30,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div style={{ display: 'flex', gap: 20, marginBottom: 36 }}>
+      <div className="admin-stat-row">
         <StatCard label="Total de CNH's" value={stats?.total} color="#4f8ef7" />
         <StatCard label="Criadas hoje" value={stats?.createdToday} color="#34d399" />
         <StatCard
@@ -42,7 +42,7 @@ export default function DashboardPage() {
 
       {/* Recent */}
       <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid #2d3748', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="admin-recent-header">
           <span style={{ fontWeight: 600, color: '#f1f5f9' }}>Criadas recentemente</span>
           <button onClick={() => navigate('/cnhs')} style={{ background: 'none', border: 'none', color: '#4f8ef7', cursor: 'pointer', fontSize: 13 }}>Ver todas →</button>
         </div>
@@ -52,7 +52,8 @@ export default function DashboardPage() {
             <div
               key={c.id}
               onClick={() => navigate(`/cnhs/${c.id}`)}
-              style={{ display: 'flex', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid #1e2536', cursor: 'pointer', gap: 16 }}
+              className="admin-recent-item"
+              style={{ borderBottom: '1px solid #1e2536' }}
             >
               <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#4f8ef720', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>🪪</div>
               <div style={{ flex: 1 }}>

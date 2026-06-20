@@ -136,7 +136,7 @@ export default function RechargePage() {
 
         {/* Saldo atual */}
         {me && (
-          <div style={{ background: 'linear-gradient(135deg, #1a2e1a, #162216)', border: '1px solid #34d39940', borderRadius: 14, padding: '20px 24px', marginBottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="admin-card-row" style={{ background: 'linear-gradient(135deg, #1a2e1a, #162216)', border: '1px solid #34d39940', borderRadius: 14, padding: '20px 24px', marginBottom: 28 }}>
             <div>
               <div style={{ fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Seu saldo atual</div>
               <div style={{ fontSize: 34, fontWeight: 800, color: '#34d399', marginTop: 4 }}>{fmt(me.saldo)}</div>
@@ -156,7 +156,7 @@ export default function RechargePage() {
               )}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 20 }}>
+            <div className="admin-grid-3" style={{ marginBottom: 20 }}>
               {PRESETS.map(p => {
                 const total = bonus > 0 ? +(p * (1 + bonus / 100)).toFixed(2) : null
                 return (

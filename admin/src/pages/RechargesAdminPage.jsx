@@ -56,7 +56,7 @@ export default function RechargesAdminPage() {
 
   return (
     <Layout>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28 }}>
+      <div className="admin-page-header admin-page-header--center">
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#f1f5f9' }}>Recargas PIX</h1>
           <p style={{ color: '#64748b', marginTop: 4, fontSize: 14 }}>Aprove ou rejeite solicitações de recarga</p>
@@ -73,7 +73,7 @@ export default function RechargesAdminPage() {
       {editSettings && settings && (
         <div style={{ background: '#1a1d27', border: '1px solid #4f8ef740', borderRadius: 12, padding: '20px 24px', marginBottom: 24 }}>
           <div style={{ fontWeight: 600, color: '#f1f5f9', marginBottom: 16 }}>Configurações PIX</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px', gap: 14, alignItems: 'end' }}>
+          <div className="admin-settings-grid">
             <div>
               <label style={{ display: 'block', fontSize: 11, color: '#64748b', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Chave PIX</label>
               <input
@@ -117,7 +117,7 @@ export default function RechargesAdminPage() {
                 : 'Sem bônus (0%)'}
             </div>
           </div>
-          <div style={{ gridColumn: '1 / -1' }}>
+          <div className="admin-settings-full">
             <label style={{ display: 'block', fontSize: 11, color: '#64748b', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Access Token Mercado Pago</label>
             <input
               value={settingsForm.mpAccessToken || ''}
@@ -142,7 +142,7 @@ export default function RechargesAdminPage() {
       )}
 
       {/* Stats */}
-      <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
+      <div className="admin-stat-row" style={{ marginBottom: 24 }}>
         <div style={{ background: '#1a1d27', borderRadius: 12, padding: '18px 22px', border: '1px solid #f59e0b40', flex: 1 }}>
           <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>Pendentes</div>
           <div style={{ fontSize: 30, fontWeight: 800, color: '#f59e0b' }}>{data.pending}</div>
@@ -164,7 +164,7 @@ export default function RechargesAdminPage() {
       </div>
 
       {/* Filter tabs */}
-      <div style={{ display: 'flex', gap: 0, background: '#1a1d27', borderRadius: '10px 10px 0 0', border: '1px solid #2d3748', borderBottom: 'none' }}>
+      <div className="admin-tabs-row">
         {[['pending', 'Pendentes'], ['approved', 'Aprovadas'], ['rejected', 'Rejeitadas'], ['all', 'Todas']].map(([v, l]) => (
           <button key={v} onClick={() => setFilter(v)} style={{
             flex: 1, background: 'none', border: 'none',
@@ -183,8 +183,8 @@ export default function RechargesAdminPage() {
       </div>
 
       {/* Table */}
-      <div style={{ background: '#1a1d27', borderRadius: '0 0 12px 12px', border: '1px solid #2d3748' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 110px 110px 130px 120px 180px', padding: '10px 20px', fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #2d3748' }}>
+      <div className="admin-data-grid-wrap" style={{ background: '#1a1d27', borderRadius: '0 0 12px 12px', border: '1px solid #2d3748' }}>
+        <div className="admin-grid-form admin-grid-header" style={{ display: 'grid', padding: '10px 20px', fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #2d3748' }}>
           <span>Operador</span>
           <span>Valor</span>
           <span>Status</span>
@@ -196,7 +196,7 @@ export default function RechargesAdminPage() {
         {list.length === 0
           ? <div style={{ padding: '40px 20px', textAlign: 'center', color: '#475569', fontSize: 14 }}>Nenhuma recarga {filter !== 'all' ? STATUS_LABEL[filter]?.toLowerCase() : ''}</div>
           : list.map(r => (
-            <div key={r.id} style={{ display: 'grid', gridTemplateColumns: '1fr 110px 110px 130px 120px 180px', padding: '14px 20px', borderBottom: '1px solid #1e2536', alignItems: 'center' }}>
+            <div key={r.id} className="admin-grid-form" style={{ display: 'grid', padding: '14px 20px', borderBottom: '1px solid #1e2536' }}>
               <div style={{ fontWeight: 600, color: '#f1f5f9', fontSize: 14 }}>{r.userName}</div>
               <div style={{ fontWeight: 700, fontSize: 15, color: '#e2e8f0' }}>{fmt(r.amount)}</div>
               <div>

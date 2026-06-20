@@ -27,7 +27,7 @@ export default function LoginPage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f1117' }}>
-      <div style={{ background: '#1a1d27', borderRadius: 16, padding: '40px 36px', width: '100%', maxWidth: 400, boxShadow: '0 8px 40px rgba(0,0,0,0.4)' }}>
+      <div className="admin-login-card" style={{ background: '#1a1d27', borderRadius: 16, width: '100%', maxWidth: 400, boxShadow: '0 8px 40px rgba(0,0,0,0.4)' }}>
 
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px' }}>

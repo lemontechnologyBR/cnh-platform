@@ -50,7 +50,7 @@ export default function CnhListPage() {
 
   return (
     <Layout>
-      <div style={{ marginBottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div className="admin-page-header">
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#f1f5f9' }}>CNH's</h1>
           <p style={{ color: '#64748b', marginTop: 4, fontSize: 14 }}>
@@ -77,7 +77,7 @@ export default function CnhListPage() {
       </div>
 
       {/* Table */}
-      <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', overflow: 'hidden' }}>
+      <div className="admin-table-scroll" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid #2d3748' }}>

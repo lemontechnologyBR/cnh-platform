@@ -36,7 +36,7 @@ function UserModal({ user, onClose, onDone }) {
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#00000088', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={onClose}>
-      <div style={{ background: '#1a1d27', borderRadius: 16, width: 440, border: '1px solid #2d3748', padding: 28 }} onClick={e => e.stopPropagation()}>
+      <div style={{ background: '#1a1d27', borderRadius: 16, width: '100%', maxWidth: 440, margin: '16px', border: '1px solid #2d3748', padding: 28 }} onClick={e => e.stopPropagation()}>
         <h3 style={{ color: '#f1f5f9', marginBottom: 20, fontWeight: 700 }}>{isNew ? 'Novo Operador' : 'Editar Operador'}</h3>
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {[
@@ -113,7 +113,7 @@ function WalletModal({ user, onClose, onDone }) {
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#00000088', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={onClose}>
-      <div style={{ background: '#1a1d27', borderRadius: 16, width: 520, maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid #2d3748' }} onClick={e => e.stopPropagation()}>
+      <div className="admin-modal-panel" style={{ background: '#1a1d27', borderRadius: 16, maxHeight: '80vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid #2d3748' }} onClick={e => e.stopPropagation()}>
         <div style={{ padding: '20px 24px', borderBottom: '1px solid #2d3748', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 16, color: '#f1f5f9' }}>{user.nome || user.username}</div>
@@ -213,7 +213,7 @@ export default function UsersPage() {
       {editUser && <UserModal user={editUser} onClose={() => setEditUser(null)} onDone={() => { setEditUser(null); load() }} />}
       {walletUser && <WalletModal user={walletUser} onClose={() => { setWalletUser(null); load() }} onDone={load} />}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 28 }}>
+      <div className="admin-page-header admin-page-header--center">
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#f1f5f9' }}>Operadores</h1>
           <p style={{ color: '#64748b', marginTop: 4, fontSize: 14 }}>Gerencie usuários e carteiras</p>
@@ -224,7 +224,7 @@ export default function UsersPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
+      <div className="admin-stat-row" style={{ marginBottom: 24 }}>
         <div style={{ background: '#1a1d27', borderRadius: 12, padding: '18px 22px', border: '1px solid #2d3748', flex: 1 }}>
           <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 5 }}>Total de operadores</div>
           <div style={{ fontSize: 30, fontWeight: 800, color: '#4f8ef7' }}>{users.length}</div>
@@ -236,8 +236,8 @@ export default function UsersPage() {
       </div>
 
       {/* Table */}
-      <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px 120px 140px 150px', padding: '10px 20px', fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #2d3748' }}>
+      <div className="admin-data-grid-wrap" style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748' }}>
+        <div className="admin-grid-users admin-grid-header" style={{ display: 'grid', padding: '10px 20px', fontSize: 11, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #2d3748' }}>
           <span>Operador</span>
           <span>Função</span>
           <span style={{ textAlign: 'right' }}>Saldo</span>
@@ -248,7 +248,7 @@ export default function UsersPage() {
         {users.length === 0
           ? <div style={{ padding: '40px 20px', textAlign: 'center', color: '#475569', fontSize: 14 }}>Nenhum operador cadastrado</div>
           : users.map(u => (
-            <div key={u.id} style={{ display: 'grid', gridTemplateColumns: '1fr 120px 120px 140px 150px', padding: '14px 20px', borderBottom: '1px solid #1e2536', alignItems: 'center' }}>
+            <div key={u.id} className="admin-grid-users" style={{ display: 'grid', padding: '14px 20px', borderBottom: '1px solid #1e2536' }}>
               <div>
                 <div style={{ fontWeight: 600, color: '#f1f5f9', fontSize: 14 }}>{u.nome || u.username}</div>
                 <div style={{ color: '#475569', fontSize: 12, marginTop: 1 }}>@{u.username}</div>
