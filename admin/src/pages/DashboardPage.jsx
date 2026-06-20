@@ -1,0 +1,69 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Layout from '../components/Layout.jsx'
+import { api } from '../utils/api.js'
+
+function StatCard({ label, value, color = '#4f8ef7' }) {
+  return (
+    <div style={{ background: '#1a1d27', borderRadius: 12, padding: '24px 28px', border: '1px solid #2d3748', flex: 1 }}>
+      <div style={{ fontSize: 13, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>{label}</div>
+      <div style={{ fontSize: 40, fontWeight: 800, color }}>{value ?? '—'}</div>
+    </div>
+  )
+}
+
+export default function DashboardPage() {
+  const navigate = useNavigate()
+  const [stats, setStats] = useState(null)
+  const [recent, setRecent] = useState([])
+
+  useEffect(() => {
+    api.getStats().then(setStats).catch(() => {})
+    api.getCnhs().then(list => setRecent([...list].reverse().slice(0, 5))).catch(() => {})
+  }, [])
+
+  return (
+    <Layout>
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#f1f5f9' }}>Dashboard</h1>
+        <p style={{ color: '#64748b', marginTop: 4, fontSize: 14 }}>Visão geral do sistema CNH</p>
+      </div>
+
+      {/* Stat cards */}
+      <div style={{ display: 'flex', gap: 20, marginBottom: 36 }}>
+        <StatCard label="Total de CNH's" value={stats?.total} color="#4f8ef7" />
+        <StatCard label="Criadas hoje" value={stats?.createdToday} color="#34d399" />
+        <StatCard
+          label="Seu saldo"
+          value={stats?.saldo != null ? Number(stats.saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—'}
+          color="#a78bfa"
+        />
+      </div>
+
+      {/* Recent */}
+      <div style={{ background: '#1a1d27', borderRadius: 12, border: '1px solid #2d3748' }}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #2d3748', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontWeight: 600, color: '#f1f5f9' }}>Criadas recentemente</span>
+          <button onClick={() => navigate('/cnhs')} style={{ background: 'none', border: 'none', color: '#4f8ef7', cursor: 'pointer', fontSize: 13 }}>Ver todas →</button>
+        </div>
+        {recent.length === 0
+          ? <div style={{ padding: '32px 24px', textAlign: 'center', color: '#475569', fontSize: 14 }}>Nenhuma CNH cadastrada ainda</div>
+          : recent.map(c => (
+            <div
+              key={c.id}
+              onClick={() => navigate(`/cnhs/${c.id}`)}
+              style={{ display: 'flex', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid #1e2536', cursor: 'pointer', gap: 16 }}
+            >
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#4f8ef720', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>🪪</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: '#f1f5f9', fontSize: 14 }}>{c.nome || '—'}</div>
+                <div style={{ color: '#64748b', fontSize: 12, marginTop: 2 }}>CPF: {c.cpf || '—'} · Registro: {c.registro || '—'}</div>
+              </div>
+              <div style={{ color: '#475569', fontSize: 12 }}>{c.created_at ? new Date(c.created_at).toLocaleDateString('pt-BR') : '—'}</div>
+            </div>
+          ))
+        }
+      </div>
+    </Layout>
+  )
+}
