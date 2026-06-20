@@ -19,18 +19,28 @@ cd app && npm install && npm run dev
 - Admin: http://localhost:5174
 - API: http://localhost:3001
 
-## Docker
+## Docker local
 
 ```bash
 cp .env.example .env
-# Edite .env (JWT_SECRET, MP_ACCESS_TOKEN, etc.)
-
 docker compose up -d --build
 ```
 
-- App: http://localhost:8080/
-- Admin: http://localhost:8080/admin/
-- API: http://localhost:8080/api/
+App: http://localhost:8080/ · Admin: http://localhost:8080/admin/
+
+## Produção (VPS + Traefik)
+
+Domínios:
+- **https://cnh-digital-brasil.online** — app CNH Digital
+- **https://cupulafenix.store** — painel admin
+
+```bash
+cd /docker/cnh-platform
+cp .env.example .env   # configure JWT_SECRET e MP_ACCESS_TOKEN
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Rede Traefik externa: `pix-tips_proxy` (mesma do servidor Lemon).
 
 Login admin padrão (primeiro start): `admin` / `cnh@2026`
 

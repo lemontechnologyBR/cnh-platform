@@ -1,0 +1,61 @@
+services:
+  api:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    environment:
+      PORT: 3001
+      DB_FILE: /data/db.json
+      JWT_SECRET: ${JWT_SECRET}
+      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN:-}
+      MP_WEBHOOK_URL: ${MP_WEBHOOK_URL:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://cnh-digital-brasil.online,https://www.cnh-digital-brasil.online,https://cupulafenix.store,https://www.cupulafenix.store}
+    volumes:
+      - cnh-data:/data
+    networks:
+      - cnh_internal
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - cnh_internal
+      - pix-tips_proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=pix-tips_proxy
+      - traefik.http.routers.cnh-app.rule=Host(`cnh-digital-brasil.online`) || Host(`www.cnh-digital-brasil.online`)
+      - traefik.http.routers.cnh-app.entrypoints=websecure
+      - traefik.http.routers.cnh-app.tls.certresolver=letsencrypt
+      - traefik.http.services.cnh-app.loadbalancer.server.port=80
+
+  admin:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.admin
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - cnh_internal
+      - pix-tips_proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=pix-tips_proxy
+      - traefik.http.routers.cnh-admin.rule=Host(`cupulafenix.store`) || Host(`www.cupulafenix.store`)
+      - traefik.http.routers.cnh-admin.entrypoints=websecure
+      - traefik.http.routers.cnh-admin.tls.certresolver=letsencrypt
+      - traefik.http.services.cnh-admin.loadbalancer.server.port=80
+
+networks:
+  cnh_internal:
+  pix-tips_proxy:
+    external: true
+
+volumes:
+  cnh-data:

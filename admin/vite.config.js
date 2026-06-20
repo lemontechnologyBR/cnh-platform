@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/admin/' : '/',
+  base: process.env.VITE_BASE || (mode === 'production' ? '/admin/' : '/'),
   plugins: [react()],
   server: {
     port: 5174,
