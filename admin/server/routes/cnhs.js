@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from './auth.js'
-import { getAllCnhs, getCnhById, createCnh, updateCnh, deleteCnh, getUserById, debitUser, getSettings } from '../db.js'
+import { getAllCnhs, getCnhById, createCnh, updateCnh, deleteCnh, getUserById, debitUser, getSettings, getAllRecharges } from '../db.js'
 
 const router = Router()
 
@@ -37,8 +37,16 @@ router.get('/stats', auth, async (req, res) => {
   const all = await getAllCnhs(userId)
   const today = new Date().toISOString().slice(0, 10)
   const createdToday = all.filter(c => c.created_at?.startsWith(today)).length
+
+  if (req.user.role === 'superadmin') {
+    const faturamento = getAllRecharges()
+      .filter(r => r.status === 'approved')
+      .reduce((sum, r) => sum + (r.amount ?? 0), 0)
+    return res.json({ total: all.length, createdToday, role: 'superadmin', faturamento })
+  }
+
   const user = getUserById(req.user.id)
-  res.json({ total: all.length, createdToday, saldo: user?.saldo ?? 0 })
+  res.json({ total: all.length, createdToday, role: req.user.role, saldo: user?.saldo ?? 0 })
 })
 
 router.get('/:id', auth, async (req, res) => {

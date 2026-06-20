@@ -34,8 +34,12 @@ export default function DashboardPage() {
         <StatCard label="Total de CNH's" value={stats?.total} color="#4f8ef7" />
         <StatCard label="Criadas hoje" value={stats?.createdToday} color="#34d399" />
         <StatCard
-          label="Seu saldo"
-          value={stats?.saldo != null ? Number(stats.saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—'}
+          label={stats?.role === 'superadmin' ? 'Faturamento' : 'Seu saldo'}
+          value={
+            stats?.role === 'superadmin'
+              ? (stats?.faturamento != null ? Number(stats.faturamento).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—')
+              : (stats?.saldo != null ? Number(stats.saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—')
+          }
           color="#a78bfa"
         />
       </div>
