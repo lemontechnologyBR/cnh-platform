@@ -418,24 +418,27 @@ export async function downloadCnhPdf(data = {}) {
   const bytes = await generateCnhPdf(data)
   const filename = buildPdfFilename(data)
   const blob = new Blob([bytes], { type: 'application/pdf' })
-  const file = new File([blob], filename, { type: 'application/pdf' })
+  const url = URL.createObjectURL(blob)
+  const cleanup = () => setTimeout(() => URL.revokeObjectURL(url), 60000)
 
-  if (navigator.canShare?.({ files: [file] })) {
-    try {
-      await navigator.share({ files: [file], title: 'CNH Digital' })
-      return
-    } catch (err) {
-      if (err?.name === 'AbortError') return
-    }
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+
+  // iOS Safari não respeita <a download> — abre o PDF para salvar via ícone de compartilhar
+  if (isIOS) {
+    const opened = window.open(url, '_blank')
+    if (!opened) window.location.assign(url)
+    cleanup()
+    return
   }
 
-  const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
   link.download = filename
   link.rel = 'noopener'
+  link.style.display = 'none'
   document.body.appendChild(link)
   link.click()
   link.remove()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
+  cleanup()
 }
