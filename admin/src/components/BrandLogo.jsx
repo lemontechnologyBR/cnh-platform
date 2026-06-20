@@ -1,4 +1,4 @@
-import theme from './theme.js'
+import theme from '../styles/theme.js'
 
 export default function BrandLogo({ height = 44, showSubtitle = true, subtitle = 'Painel de controle' }) {
   return (
