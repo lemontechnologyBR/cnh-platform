@@ -34,7 +34,9 @@ let defaultFotoBytesCache = null
 
 async function loadFont(pdfDoc) {
   if (!fontBytesCache) {
-    fontBytesCache = await fetch('/fonts/NotoSans-Bold.ttf').then((r) => r.arrayBuffer())
+    const res = await fetch('/fonts/NotoSans-Bold.ttf')
+    if (!res.ok) throw new Error(`Fonte não encontrada (${res.status})`)
+    fontBytesCache = await res.arrayBuffer()
   }
   pdfDoc.registerFontkit(fontkit)
   return pdfDoc.embedFont(fontBytesCache)
@@ -283,12 +285,31 @@ function maskArea(page, x, y, width, height) {
   page.drawRectangle({ x, y, width, height, color: WHITE, borderWidth: 0 })
 }
 
+async function embedImageFromSource(pdfDoc, src) {
+  if (!src) return null
+  const s = String(src)
+  if (s.startsWith('data:')) return embedImageFromDataUrl(pdfDoc, s)
+  if (s.startsWith('/') || s.startsWith('http')) {
+    try {
+      const res = await fetch(s)
+      if (!res.ok) return null
+      const buf = await res.arrayBuffer()
+      const ct = res.headers.get('content-type') || ''
+      if (ct.includes('jpeg') || ct.includes('jpg')) return await pdfDoc.embedJpg(buf)
+      return await pdfDoc.embedPng(buf)
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
 async function drawImages(page, pdfDoc, data) {
   maskArea(page, 74, 632, 60, 80)
 
   let fotoImg = null
   if (data.foto) {
-    fotoImg = await embedImageFromDataUrl(pdfDoc, data.foto)
+    fotoImg = await embedImageFromSource(pdfDoc, data.foto)
   } else {
     try {
       fotoImg = await pdfDoc.embedPng(await loadDefaultFotoBytes())
@@ -298,7 +319,7 @@ async function drawImages(page, pdfDoc, data) {
 
   if (data.assinatura) {
     maskArea(page, 79, 614, 45, 16)
-    const img = await embedImageFromDataUrl(pdfDoc, data.assinatura)
+    const img = await embedImageFromSource(pdfDoc, data.assinatura)
     if (img) page.drawImage(img, { x: 79, y: 614, width: 45, height: 16 })
   }
 }
@@ -328,13 +349,23 @@ const DEFAULTS = {
   mrz3:          'DIEGO<<ARRIEIRA<DE<OLIVEIRA<<<',
 }
 
-export async function generateCnhPdf(data) {
-  const merged = { ...DEFAULTS, ...data }
+export function mergeCnhData(data = {}) {
+  const merged = { ...data }
+  for (const [key, val] of Object.entries(DEFAULTS)) {
+    if (merged[key] == null || merged[key] === '') merged[key] = val
+  }
   if (!merged.nacionalidade) merged.nacionalidade = DEFAULTS.nacionalidade
+  return merged
+}
+
+export async function generateCnhPdf(data) {
+  const merged = mergeCnhData(data)
   const key = JSON.stringify(merged)
   if (pdfBytesCache.has(key)) return pdfBytesCache.get(key)
 
-  const templateBytes = await fetch(LUIS_PDF_URL).then((r) => r.arrayBuffer())
+  const templateRes = await fetch(LUIS_PDF_URL)
+  if (!templateRes.ok) throw new Error(`Template PDF não encontrado (${templateRes.status})`)
+  const templateBytes = await templateRes.arrayBuffer()
   const pdfDoc = await PDFDocument.load(templateBytes, { ignoreEncryption: true })
 
   // ── 1. Apaga o texto do Luis do stream bruto ──────────────────────────────

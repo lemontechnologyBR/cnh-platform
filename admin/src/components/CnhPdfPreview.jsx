@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { generateCnhPdf } from '../utils/generateCnhPdf.js'
+import { generateCnhPdf, mergeCnhData } from '../utils/generateCnhPdf.js'
 import { getPdfPage, renderPdfRegion } from '../utils/renderCnhPdf.js'
 import { paintCnhCanvas } from '../utils/cnhCanvas.js'
 
@@ -16,38 +16,91 @@ function CardCanvas({ side, data }) {
   const canvasRef = useRef(null)
   const blobRef = useRef(null)
   const [ready, setReady] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState(null)
 
   useEffect(() => {
     let cancelled = false
+    const display = canvasRef.current
+    if (!display) return
+
     setReady(false)
+    setLoading(true)
     setErro(null)
+
+    const merged = mergeCnhData(data)
+
     ;(async () => {
       try {
-        const pdfBytes = await generateCnhPdf(data)
+        const pdfBytes = await generateCnhPdf(merged)
         if (cancelled) return
+
         if (blobRef.current) URL.revokeObjectURL(blobRef.current)
         const blobUrl = URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }))
         blobRef.current = blobUrl
+
         const page = await getPdfPage(blobUrl, 1)
         if (cancelled) return
+
         const pdfCanvas = await renderPdfRegion(page, REGIONS[side], RENDER_SCALE)
         if (cancelled) return
+
+        if (!pdfCanvas.width || !pdfCanvas.height) {
+          throw new Error('Recorte do PDF vazio')
+        }
+
+        if (!canvasRef.current) throw new Error('Canvas indisponível')
         paintCnhCanvas(canvasRef.current, pdfCanvas)
-        if (!cancelled) setReady(true)
+        if (!cancelled) {
+          setReady(true)
+          setLoading(false)
+        }
       } catch (e) {
-        if (!cancelled) setErro(e.message)
+        console.error('CnhPdfPreview:', e)
+        if (!cancelled) {
+          setErro(e?.message || 'Erro ao gerar preview')
+          setLoading(false)
+        }
       }
     })()
-    return () => { cancelled = true }
+
+    return () => {
+      cancelled = true
+      if (blobRef.current) {
+        URL.revokeObjectURL(blobRef.current)
+        blobRef.current = null
+      }
+    }
   }, [side, JSON.stringify(data)])
 
-  if (erro) return <div style={{ color: '#ef4444', fontSize: 12, padding: 8 }}>{erro}</div>
+  if (erro) {
+    return (
+      <div style={{ color: '#ef4444', fontSize: 12, padding: 12, lineHeight: 1.5 }}>
+        Erro ao gerar CNH: {erro}
+      </div>
+    )
+  }
+
   return (
-    <canvas
-      ref={canvasRef}
-      style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 8, opacity: ready ? 1 : 0, transition: 'opacity 0.25s', aspectRatio: '525 / 726' }}
-    />
+    <div style={{ position: 'relative', minHeight: 120 }}>
+      {loading && (
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontSize: 13 }}>
+          Gerando preview...
+        </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: '100%',
+          height: 'auto',
+          display: 'block',
+          borderRadius: 8,
+          opacity: ready ? 1 : 0,
+          transition: 'opacity 0.25s',
+          aspectRatio: '525 / 726',
+        }}
+      />
+    </div>
   )
 }
 
