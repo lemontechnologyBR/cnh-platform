@@ -16,6 +16,7 @@ import { PDFDocument, PDFRawStream, PDFName, rgb, degrees, StandardFonts } from 
 import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
 import { buildConsultaUrl, getRegistroForConsulta } from './consultaUrl.js'
+import { CNH_QR_PDF_OPTIONS } from './cnhQrConfig.js'
 
 export const LUIS_PDF_URL = '/cnh_luis.pdf'
 export const DEFAULT_FOTO_URL = '/foto_padrao_3x4.png'
@@ -335,7 +336,7 @@ async function drawQrCode(page, pdfDoc, rawData) {
   try {
     const url = buildConsultaUrl(null, null, rawData)
     if (!url) return
-    const dataUrl = await QRCode.toDataURL(url, { margin: 2, width: 1024, errorCorrectionLevel: 'H' })
+    const dataUrl = await QRCode.toDataURL(url, CNH_QR_PDF_OPTIONS)
     const parsed = dataUrlToBytes(dataUrl)
     if (!parsed) return
     const qrImg = await pdfDoc.embedPng(parsed.bytes)

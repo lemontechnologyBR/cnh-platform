@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { buildConsultaUrl, fetchConsultaCnh } from '../utils/consultaUrl.js'
+import { CNH_QR_SVG_PROPS } from '../utils/cnhQrConfig.js'
 import { useSenatranTheme } from '../utils/senatranTheme.js'
 import '../styles/senatran-consulta.css'
 
@@ -65,7 +66,7 @@ export default function SenatranQrPage() {
       {!loading && !error && qrUrl && (
         <div className="senatran-qr-wrap">
           <div className="senatran-qr-box">
-            <QRCodeSVG value={qrUrl} size={400} level="H" includeMargin={true} />
+            <QRCodeSVG value={qrUrl} size={400} {...CNH_QR_SVG_PROPS} />
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { buildConsultaUrl } from '../utils/consultaUrl.js'
+import { CNH_QR_SVG_PROPS } from '../utils/cnhQrConfig.js'
 
 export default function CnhQrSlide({ data = {} }) {
   const wrapRef = useRef(null)
@@ -40,7 +41,7 @@ export default function CnhQrSlide({ data = {} }) {
         boxSizing: 'border-box',
       }}
     >
-      <QRCodeSVG value={url} size={size} level="H" includeMargin={true} />
+      <QRCodeSVG value={url} size={size} {...CNH_QR_SVG_PROPS} />
     </div>
   )
 }

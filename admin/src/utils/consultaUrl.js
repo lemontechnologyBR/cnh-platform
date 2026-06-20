@@ -27,6 +27,24 @@ export function buildConsultaUrl(cpf, _registro, data = null) {
   const cpfFmt = formatCpf(src.cpf ?? cpf)
   const reg = getRegistroForConsulta(src)
   if (!cpfFmt || !reg) return ''
-  const params = new URLSearchParams({ cpf: cpfFmt, numero_registro: reg })
+
+  const params = new URLSearchParams({
+    cpf: cpfFmt,
+    numero_registro: reg,
+  })
+
+  const extras = [
+    ['numero_validacao', src.numero],
+    ['codigo_validacao', src.codigoValidacao ?? src.certA],
+    ['renach', src.renach ?? src.certB],
+    ['validade', src.validade],
+    ['emissao', src.emissao],
+    ['cat_hab', src.catHab],
+  ]
+  for (const [key, val] of extras) {
+    const s = val != null ? String(val).trim() : ''
+    if (s) params.set(key, s)
+  }
+
   return `${CONSULTA_BASE}/?${params}`
 }
