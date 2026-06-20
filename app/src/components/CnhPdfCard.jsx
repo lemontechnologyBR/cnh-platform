@@ -51,7 +51,7 @@ export default function CnhPdfCard({ side = 'frente', data = {} }) {
         if (!cancelled) setReady(true)
       } catch (err) {
         console.error('CnhPdfCard:', err)
-        if (!cancelled) setErro(err.message)
+        if (!cancelled) setErro('Não foi possível exibir a CNH. Tente recarregar a página.')
       }
     })()
 
@@ -66,8 +66,18 @@ export default function CnhPdfCard({ side = 'frente', data = {} }) {
 
   if (erro) {
     return (
-      <div style={{ padding: 16, textAlign: 'center', color: '#c62828', fontSize: 13 }}>
-        Erro ao gerar CNH: {erro}
+      <div style={{ padding: 24, textAlign: 'center', color: '#555', fontSize: 14 }}>
+        <p style={{ margin: '0 0 12px' }}>{erro}</p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          style={{
+            background: '#1351B4', color: '#fff', border: 'none', borderRadius: 8,
+            padding: '10px 20px', fontSize: 14, cursor: 'pointer',
+          }}
+        >
+          Recarregar
+        </button>
       </div>
     )
   }

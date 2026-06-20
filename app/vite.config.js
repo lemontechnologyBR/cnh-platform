@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['cnh-logo.png', 'cnhdobrasil.png', 'favicon.svg'],
+      includeAssets: ['cnh-logo.png', 'cnhdobrasil.png', 'favicon.svg', 'pdf.worker.min.mjs'],
       manifest: {
         name: 'CNH Digital',
         short_name: 'CNH Digital',
@@ -45,7 +45,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2,mjs}'],
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api/],
+        navigateFallbackDenylist: [/^\/api/, /\.mjs$/, /pdf\.worker/],
       },
     }),
   ],
