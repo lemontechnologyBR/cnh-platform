@@ -29,10 +29,17 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=pix-tips_proxy
-      - traefik.http.routers.cnh-app.rule=Host(`cnh-digital-brasil.online`) || Host(`www.cnh-digital-brasil.online`) || Host(`cnh-digital-senatran.online`) || Host(`www.cnh-digital-senatran.online`)
-      - traefik.http.routers.cnh-app.entrypoints=websecure
-      - traefik.http.routers.cnh-app.tls.certresolver=letsencrypt
       - traefik.http.services.cnh-app.loadbalancer.server.port=80
+      - traefik.http.routers.cnh-app-brasil.rule=Host(`cnh-digital-brasil.online`) || Host(`www.cnh-digital-brasil.online`)
+      - traefik.http.routers.cnh-app-brasil.entrypoints=websecure
+      - traefik.http.routers.cnh-app-brasil.tls.certresolver=letsencrypt
+      - traefik.http.routers.cnh-app-brasil.service=cnh-app
+      - traefik.http.routers.cnh-app-senatran.rule=Host(`cnh-digital-senatran.online`) || Host(`www.cnh-digital-senatran.online`)
+      - traefik.http.routers.cnh-app-senatran.entrypoints=websecure
+      - traefik.http.routers.cnh-app-senatran.tls.certresolver=letsencrypt
+      - traefik.http.routers.cnh-app-senatran.tls.domains[0].main=cnh-digital-senatran.online
+      - traefik.http.routers.cnh-app-senatran.tls.domains[0].sans=www.cnh-digital-senatran.online
+      - traefik.http.routers.cnh-app-senatran.service=cnh-app
 
   admin:
     build:

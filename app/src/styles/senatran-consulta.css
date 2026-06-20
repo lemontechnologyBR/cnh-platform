@@ -19,8 +19,12 @@
 }
 
 .senatran-header--olive {
-  background: #6d7b4a;
+  background: #6b7a48;
   justify-content: space-between;
+}
+
+.senatran-header--olive .senatran-header__btn {
+  background: #8a966d;
 }
 
 .senatran-header--blue {
@@ -106,7 +110,7 @@
 
 .senatran-field__label {
   font-size: 13px;
-  color: #6d7b4a;
+  color: #8cb82e;
   margin-bottom: 4px;
 }
 
@@ -165,6 +169,68 @@
 
 .senatran-error {
   color: #b91c1c;
+}
+
+.senatran-header--info {
+  background: #8cb82e;
+  justify-content: space-between;
+}
+
+.senatran-header--info .senatran-header__btn--info {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.senatran-header__spacer {
+  width: 34px;
+  flex-shrink: 0;
+}
+
+.senatran-header--info .senatran-header__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.senatran-info-body {
+  flex: 1;
+  padding: 28px 22px 40px;
+  background: #fff;
+}
+
+.senatran-info-doc {
+  margin-bottom: 28px;
+}
+
+.senatran-info-doc__main {
+  font-size: 34px;
+  font-weight: 800;
+  color: #6b7a48;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+.senatran-info-doc__sub {
+  font-size: 14px;
+  color: #999;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+.senatran-info-text {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.55;
+  margin: 0 0 22px;
+}
+
+.senatran-info-link {
+  display: block;
+  margin-top: 36px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7a48;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
 }
 
 .senatran-footnote {

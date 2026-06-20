@@ -33,8 +33,8 @@ export default function SenatranConsultaPage() {
     return () => { cancelled = true }
   }, [cpf, numeroRegistro])
 
-  function goQr() {
-    navigate(`/consulta/qrcode?cpf=${encodeURIComponent(cpf)}&numero_registro=${encodeURIComponent(numeroRegistro)}`)
+  function goInfo() {
+    navigate(`/consulta/info?cpf=${encodeURIComponent(cpf)}&numero_registro=${encodeURIComponent(numeroRegistro)}`)
   }
 
   if (loading) {
@@ -68,7 +68,7 @@ export default function SenatranConsultaPage() {
           </svg>
         </button>
         <span className="senatran-header__title">Detalhamento</span>
-        <button type="button" className="senatran-header__btn" onClick={goQr} aria-label="QR Code">
+        <button type="button" className="senatran-header__btn" onClick={goInfo} aria-label="Informações">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="1.8"/>
             <path d="M12 11v5" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>

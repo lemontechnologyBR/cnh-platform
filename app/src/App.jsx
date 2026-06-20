@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ConsultaEntry from './pages/ConsultaEntry'
 import SenatranConsultaPage from './pages/SenatranConsultaPage'
+import SenatranInfoPage from './pages/SenatranInfoPage'
 import SenatranQrPage from './pages/SenatranQrPage'
 import SplashPage from './pages/SplashPage'
 import GovBrLoginPage from './pages/GovBrLoginPage'
@@ -16,6 +17,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<ConsultaEntry />} />
       <Route path="/consulta" element={<SenatranConsultaPage />} />
+      <Route path="/consulta/info" element={<SenatranInfoPage />} />
       <Route path="/consulta/qrcode" element={<SenatranQrPage />} />
       <Route path="/splash" element={<SplashPage />} />
       <Route path="/govbr-login" element={<GovBrLoginPage />} />
