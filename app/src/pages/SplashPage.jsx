@@ -48,7 +48,7 @@ export default function SplashPage() {
 
           {/* Logo CNH */}
           <img
-            src="/cnh-logo.png?v=2"
+            src="/cnhdobrasil.png?v=1"
             alt="CNH do Brasil"
             style={{ width: '75%', objectFit: 'contain', display: 'block', marginBottom: 14 }}
             draggable={false}

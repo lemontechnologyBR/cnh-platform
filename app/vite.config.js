@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['cnh-logo.png', 'favicon.svg'],
+      includeAssets: ['cnhdobrasil.png', 'favicon.svg'],
       manifest: {
         name: 'CNH Digital',
         short_name: 'CNH Digital',
@@ -23,19 +23,19 @@ export default defineConfig({
         lang: 'pt-BR',
         icons: [
           {
-            src: 'cnh-logo.png',
+            src: 'cnhdobrasil.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: 'cnh-logo.png',
+            src: 'cnhdobrasil.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: 'cnh-logo.png',
+            src: 'cnhdobrasil.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
