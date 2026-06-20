@@ -193,7 +193,6 @@ export async function findCnhByCpfAndRegistro(cpf, numeroRegistro) {
   const b = norm(numeroRegistro)
   if (!b) return null
   if (a === b) return cnh
-  if (a && b && (a.endsWith(b) || b.endsWith(a))) return cnh
   return null
 }
 

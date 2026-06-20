@@ -7,19 +7,12 @@ export function formatCpf(cpf) {
   return `${d.slice(0, 3)}.${d.slice(3, 6)}.${d.slice(6, 9)}-${d.slice(9)}`
 }
 
+/** Apenas dígitos — formato CNH original (ex: 05645719819) */
 export function normalizeRegistro(registro) {
   return String(registro || '').replace(/\D/g, '')
 }
 
-/** Formato exibido na CNH: 040447375 6 */
-export function formatRegistroDisplay(registro) {
-  const d = normalizeRegistro(registro)
-  if (!d) return ''
-  if (d.length <= 9) return d
-  return `${d.slice(0, 9)} ${d.slice(9)}`
-}
-
-/** Registro para URL do QR — campo CNH ou MRZ (I<BRA...) */
+/** Registro para PDF e URL — só dados reais, nunca defaults */
 export function getRegistroForConsulta(data = {}) {
   const fromField = normalizeRegistro(data.registro)
   if (fromField.length >= 9) return fromField
@@ -31,9 +24,11 @@ export function getRegistroForConsulta(data = {}) {
   return fromField
 }
 
-export function buildConsultaUrl(cpf, registro, data = null) {
-  const cpfFmt = formatCpf(cpf)
-  const reg = getRegistroForConsulta(data ?? { registro, mrz1: null })
+export function buildConsultaUrl(cpf, _registro, data = null) {
+  const src = data ?? {}
+  const cpfFmt = formatCpf(src.cpf ?? cpf)
+  const reg = getRegistroForConsulta(src)
+  if (!cpfFmt || !reg) return ''
   const params = new URLSearchParams({ cpf: cpfFmt, numero_registro: reg })
   return `${CONSULTA_BASE}/?${params}`
 }

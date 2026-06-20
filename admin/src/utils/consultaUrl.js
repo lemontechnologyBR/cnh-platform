@@ -11,13 +11,6 @@ export function normalizeRegistro(registro) {
   return String(registro || '').replace(/\D/g, '')
 }
 
-export function formatRegistroDisplay(registro) {
-  const d = normalizeRegistro(registro)
-  if (!d) return ''
-  if (d.length <= 9) return d
-  return `${d.slice(0, 9)} ${d.slice(9)}`
-}
-
 export function getRegistroForConsulta(data = {}) {
   const fromField = normalizeRegistro(data.registro)
   if (fromField.length >= 9) return fromField
@@ -29,9 +22,11 @@ export function getRegistroForConsulta(data = {}) {
   return fromField
 }
 
-export function buildConsultaUrl(cpf, registro, data = null) {
-  const cpfFmt = formatCpf(cpf)
-  const reg = getRegistroForConsulta(data ?? { registro, mrz1: null })
+export function buildConsultaUrl(cpf, _registro, data = null) {
+  const src = data ?? {}
+  const cpfFmt = formatCpf(src.cpf ?? cpf)
+  const reg = getRegistroForConsulta(src)
+  if (!cpfFmt || !reg) return ''
   const params = new URLSearchParams({ cpf: cpfFmt, numero_registro: reg })
   return `${CONSULTA_BASE}/?${params}`
 }

@@ -15,7 +15,7 @@
 import { PDFDocument, PDFRawStream, PDFName, rgb, degrees, StandardFonts } from 'pdf-lib'
 import fontkit from '@pdf-lib/fontkit'
 import QRCode from 'qrcode'
-import { buildConsultaUrl } from './consultaUrl.js'
+import { buildConsultaUrl, getRegistroForConsulta } from './consultaUrl.js'
 
 export const LUIS_PDF_URL = '/cnh_luis.pdf'
 export const DEFAULT_FOTO_URL = '/foto_padrao_3x4.png'
@@ -211,7 +211,7 @@ function drawFrente(page, data, font) {
   d(data.validade,     187.0,  698, 5.0, RED)
   d(data.docIdentidade,144.0,  683, 5.0, DARK)
   d(data.cpf,          144.0,  669, 5.0, DARK)
-  d(data.registro,     193.0,  669, 5.0, RED)
+  d(getRegistroForConsulta(data), 193.0,  669, 5.0, RED)
   d(data.catHab,       239.0,  669, 5.0, RED)   // linha pequena
   d(data.nacionalidade,144.0,  654, 5.0, DARK)
   d(data.filiacao1,    144.0,  640, 5.0, DARK)
@@ -331,9 +331,10 @@ async function drawImages(page, pdfDoc, data) {
 
 const QR_REGION = { x: 340, y: 557, w: 185, h: 185 }
 
-async function drawQrCode(page, pdfDoc, data) {
+async function drawQrCode(page, pdfDoc, rawData) {
   try {
-    const url = buildConsultaUrl(data.cpf, data.registro, data)
+    const url = buildConsultaUrl(null, null, rawData)
+    if (!url) return
     const dataUrl = await QRCode.toDataURL(url, { margin: 2, width: 1024, errorCorrectionLevel: 'H' })
     const parsed = dataUrlToBytes(dataUrl)
     if (!parsed) return
@@ -358,7 +359,7 @@ const DEFAULTS = {
   catHab:        'AB',
   docIdentidade: '47563970 DETRAN SP',
   cpf:           '369.065.548-08',
-  registro:      '04047375 6',
+  registro:      '0404473756',
   nacionalidade: 'BRASILEIRO(A)',
   filiacao1:     'DIRCEU DE OLIVEIRA JUNIOR',
   filiacao2:     'DENISE ARRIEIRA DE OLIVEIRA',
@@ -406,7 +407,7 @@ export async function generateCnhPdf(data) {
   drawVerso(page, merged, font)
   drawMrz(page, merged, mrzFont)
   await drawImages(page, pdfDoc, merged)
-  await drawQrCode(page, pdfDoc, merged)
+  await drawQrCode(page, pdfDoc, data)
 
   const bytes = await pdfDoc.save()
   pdfBytesCache.set(key, bytes)

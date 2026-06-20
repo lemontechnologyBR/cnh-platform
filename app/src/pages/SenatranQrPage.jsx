@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
-import { buildConsultaUrl, fetchConsultaCnh, formatRegistroDisplay } from '../utils/consultaUrl.js'
+import { buildConsultaUrl, fetchConsultaCnh } from '../utils/consultaUrl.js'
 import '../styles/senatran-consulta.css'
 
 export default function SenatranQrPage() {
@@ -10,7 +10,6 @@ export default function SenatranQrPage() {
   const cpf = searchParams.get('cpf') || ''
   const numeroRegistro = searchParams.get('numero_registro') || ''
   const [qrUrl, setQrUrl] = useState('')
-  const [registroLabel, setRegistroLabel] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const agora = new Date().toLocaleString('pt-BR')
@@ -25,10 +24,7 @@ export default function SenatranQrPage() {
     ;(async () => {
       try {
         const cnh = await fetchConsultaCnh(cpf, numeroRegistro)
-        if (!cancelled) {
-          setQrUrl(buildConsultaUrl(cnh.cpf, cnh.registro, cnh))
-          setRegistroLabel(formatRegistroDisplay(cnh.registro))
-        }
+        if (!cancelled) setQrUrl(buildConsultaUrl(null, null, cnh))
       } catch (err) {
         if (!cancelled) setError(err.message || 'Erro ao carregar.')
       } finally {
@@ -69,11 +65,6 @@ export default function SenatranQrPage() {
           <div className="senatran-qr-box">
             <QRCodeSVG value={qrUrl} size={340} level="H" includeMargin={true} />
           </div>
-          {registroLabel && (
-            <p style={{ margin: '16px 0 0', fontSize: 17, fontWeight: 700, color: '#D50000', letterSpacing: '0.06em' }}>
-              {registroLabel}
-            </p>
-          )}
         </div>
       )}
     </div>

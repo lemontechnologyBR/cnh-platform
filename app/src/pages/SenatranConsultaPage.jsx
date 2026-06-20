@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { buildConsultaUrl, fetchConsultaCnh, formatCpf } from '../utils/consultaUrl.js'
+import { buildConsultaUrl, fetchConsultaCnh, formatCpf, getRegistroForConsulta } from '../utils/consultaUrl.js'
 import '../styles/senatran-consulta.css'
 
 export default function SenatranConsultaPage() {
@@ -56,7 +56,7 @@ export default function SenatranConsultaPage() {
   }
 
   const fotoSrc = cnh.foto || '/foto_padrao_3x4.png'
-  const qrcodeUrl = buildConsultaUrl(cnh.cpf, cnh.registro, cnh)
+  const qrcodeUrl = buildConsultaUrl(null, null, cnh)
 
   return (
     <div className="senatran-page">
@@ -91,7 +91,7 @@ export default function SenatranConsultaPage() {
         <Field label="Doc. Identidade/Órg. Emissor/UF" value={cnh.docIdentidade} />
         <Field label="CPF" value={formatCpf(cnh.cpf)} />
         <Field label="Data de Nascimento" value={cnh.nascimento} />
-        <Field label="Nº Registro" value={cnh.registro} />
+        <Field label="Nº Registro" value={getRegistroForConsulta(cnh) || cnh.registro} />
         <Field label="Categoria" value={cnh.catHab} />
         <Field label="Validade" value={cnh.validade} />
         <Field label="Data de Emissão" value={cnh.emissao} />

@@ -32,9 +32,7 @@ function maskLocalNasc(v) {
 }
 
 function maskRegistro(v) {
-  const d = String(v).replace(/\D/g, '').slice(0, 11)
-  if (d.length <= 9) return d
-  return `${d.slice(0, 9)} ${d.slice(9)}`
+  return String(v).replace(/\D/g, '').slice(0, 11)
 }
 
 function maskCertB(v) {
@@ -133,7 +131,7 @@ const FIELDS = [
   { key: 'localNascimento', label: 'Local de nascimento (UF)', placeholder: 'SALINAS, MG', mask: 'localNasc' },
   { key: 'cpf',           label: 'CPF',                       placeholder: '369.065.548-08', mask: 'cpf', inputMode: 'numeric' },
   { key: 'docIdentidade', label: 'Documento de identidade',   placeholder: '47526376 DETRAN SP', mask: 'upper' },
-  { key: 'registro',      label: 'Nº Registro CNH',           placeholder: '040447375 6', mask: 'registro', inputMode: 'numeric' },
+  { key: 'registro',      label: 'Nº Registro CNH',           placeholder: '05645719819', mask: 'registro', inputMode: 'numeric' },
   { key: 'catHab',        label: 'Categoria',                 placeholder: 'AB', mask: 'catHab' },
   { key: 'nacionalidade', label: 'Nacionalidade',             placeholder: 'BRASILEIRO(A)', mask: 'upper', default: 'BRASILEIRO(A)' },
   { key: 'primeiraHab',   label: '1ª Habilitação',            placeholder: '26/02/2007', mask: 'date', inputMode: 'numeric' },
