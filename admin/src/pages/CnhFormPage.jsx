@@ -156,6 +156,7 @@ const FIELDS = [
 ]
 
 const EMPTY = Object.fromEntries(FIELDS.map(f => [f.key, f.default ?? '']))
+const LOCKED_AFTER_CREATE = new Set(['cpf', 'nome'])
 
 function splitLegacyNascimento(data) {
   const out = { ...data }
@@ -262,6 +263,16 @@ export default function CnhFormPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+
+    if (!isEdit) {
+      const ok = window.confirm(
+        'Confirma a criação desta CNH?\n\n'
+        + 'Revise CPF e nome com atenção — após criar, esses campos não podem ser alterados.\n'
+        + 'Se errar CPF ou nome, será necessário criar uma nova CNH (nova cobrança).',
+      )
+      if (!ok) return
+    }
+
     setSaving(true)
     try {
       if (isEdit) {
@@ -288,10 +299,44 @@ export default function CnhFormPage() {
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: '#f1f5f9' }}>{isEdit ? 'Editar CNH' : 'Nova CNH'}</h1>
             <p style={{ color: '#64748b', fontSize: 13, marginTop: 2 }}>
-              {isEdit ? 'Atualize os dados do documento' : 'Preencha os dados — a CNH expira automaticamente em 30 dias'}
+              {isEdit
+                ? 'CPF e nome não podem ser alterados. Demais campos podem ser editados.'
+                : 'Preencha os dados — a CNH expira automaticamente em 30 dias'}
             </p>
           </div>
         </div>
+
+        {!isEdit && (
+          <div style={{
+            background: '#422006',
+            border: '1px solid #f59e0b',
+            borderRadius: 12,
+            padding: '16px 20px',
+            marginBottom: 20,
+            color: '#fde68a',
+            fontSize: 13,
+            lineHeight: 1.55,
+          }}>
+            <strong style={{ color: '#fbbf24', display: 'block', marginBottom: 6 }}>Revise tudo antes de criar</strong>
+            CPF e nome ficam <strong>bloqueados após a criação</strong>. Se errar esses dados, será necessário{' '}
+            <strong>criar uma nova CNH</strong> (nova cobrança).
+          </div>
+        )}
+
+        {isEdit && (
+          <div style={{
+            background: '#1e293b',
+            border: '1px solid #334155',
+            borderRadius: 12,
+            padding: '14px 20px',
+            marginBottom: 20,
+            color: '#94a3b8',
+            fontSize: 13,
+            lineHeight: 1.5,
+          }}>
+            CPF e nome não podem ser editados. Errou? Exclua esta CNH e crie outra.
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           {/* Foto e assinatura */}
@@ -314,7 +359,9 @@ export default function CnhFormPage() {
           </div>
 
           <div className="admin-grid-2" style={{ background: '#161210', borderRadius: 12, border: '1px solid #3a2820', padding: '28px 28px' }}>
-            {FIELDS.map((f, idx) => (
+            {FIELDS.map((f) => {
+              const locked = isEdit && LOCKED_AFTER_CREATE.has(f.key)
+              return (
               <div key={f.key} style={f.key.startsWith('mrz') ? { gridColumn: '1 / -1' } : f.key === 'pin' ? { gridColumn: '1 / -1', background: '#221816', borderRadius: 10, padding: '16px 20px', border: '1px solid #FF6B0040' } : {}}>
                 {f.key === 'mrz1' && (
                   <div className="admin-mrz-header">
@@ -331,14 +378,19 @@ export default function CnhFormPage() {
                     </button>
                   </div>
                 )}
-                <label style={{ display: 'block', fontSize: 11, color: f.key === 'pin' ? '#FF6B00' : '#64748b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: f.key === 'pin' ? 700 : 400 }}>{f.label}</label>
+                <label style={{ display: 'block', fontSize: 11, color: f.key === 'pin' ? '#FF6B00' : locked ? '#94a3b8' : '#64748b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: f.key === 'pin' ? 700 : 400 }}>
+                  {f.label}{locked ? ' (bloqueado)' : ''}
+                </label>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <input
                     value={form[f.key] || ''}
                     onChange={e => set(f.key, applyMask(f.mask, e.target.value))}
                     placeholder={f.placeholder}
+                    readOnly={locked}
+                    tabIndex={locked ? -1 : undefined}
+                    title={locked ? 'CPF e nome não podem ser alterados após a criação' : undefined}
                     inputMode={f.inputMode || (f.key === 'pin' ? 'numeric' : 'text')}
-                    style={{ flex: 1, width: f.key === 'pin' ? 120 : '100%', background: '#0a0908', border: `1px solid ${f.key === 'pin' ? '#FF6B00' : '#3a2820'}`, borderRadius: 8, padding: '10px 14px', color: '#e2e8f0', fontSize: f.key === 'pin' ? 22 : 14, outline: 'none', fontFamily: f.key.startsWith('mrz') || f.key === 'pin' || f.mask === 'cpf' || f.mask === 'date' ? 'monospace' : 'inherit', letterSpacing: f.key === 'pin' ? '0.3em' : 'normal' }}
+                    style={{ flex: 1, width: f.key === 'pin' ? 120 : '100%', background: locked ? '#141210' : '#0a0908', border: `1px solid ${f.key === 'pin' ? '#FF6B00' : locked ? '#475569' : '#3a2820'}`, borderRadius: 8, padding: '10px 14px', color: locked ? '#94a3b8' : '#e2e8f0', fontSize: f.key === 'pin' ? 22 : 14, outline: 'none', cursor: locked ? 'not-allowed' : 'text', fontFamily: f.key.startsWith('mrz') || f.key === 'pin' || f.mask === 'cpf' || f.mask === 'date' ? 'monospace' : 'inherit', letterSpacing: f.key === 'pin' ? '0.3em' : 'normal' }}
                   />
                   {f.autoGen && (
                     <button
@@ -352,7 +404,7 @@ export default function CnhFormPage() {
                   )}
                 </div>
               </div>
-            ))}
+            )})}
           </div>
 
           {error && (

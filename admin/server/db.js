@@ -212,7 +212,7 @@ export async function createCnh(data) {
 export async function updateCnh(id, data) {
   const idx = db.data.cnhs.findIndex(c => c.id === id)
   if (idx === -1) return null
-  const { expires_at, created_at, id: _id, ...rest } = data
+  const { expires_at, created_at, id: _id, cpf: _cpf, nome: _nome, ...rest } = data
   db.data.cnhs[idx] = { ...db.data.cnhs[idx], ...rest, id, updated_at: new Date().toISOString() }
   await db.write()
   return db.data.cnhs[idx]
