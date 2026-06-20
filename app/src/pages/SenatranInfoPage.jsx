@@ -1,7 +1,9 @@
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSenatranTheme } from '../utils/senatranTheme.js'
 import '../styles/senatran-consulta.css'
 
 export default function SenatranInfoPage() {
+  useSenatranTheme()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const cpf = searchParams.get('cpf') || ''

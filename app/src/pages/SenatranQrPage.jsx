@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { buildConsultaUrl, fetchConsultaCnh } from '../utils/consultaUrl.js'
+import { useSenatranTheme } from '../utils/senatranTheme.js'
 import '../styles/senatran-consulta.css'
 
 export default function SenatranQrPage() {
+  useSenatranTheme()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const cpf = searchParams.get('cpf') || ''

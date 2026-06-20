@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { fetchConsultaCnh } from '../utils/consultaUrl.js'
 import { buildConsultaFields } from '../utils/consultaDisplay.js'
+import { useSenatranTheme } from '../utils/senatranTheme.js'
 import '../styles/senatran-consulta.css'
 
 export default function SenatranConsultaPage() {
+  useSenatranTheme()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const cpf = searchParams.get('cpf') || ''
