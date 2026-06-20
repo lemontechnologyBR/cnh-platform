@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['cnhdobrasil.png', 'favicon.svg'],
+      includeAssets: ['cnh-logo.png', 'cnhdobrasil.png', 'favicon.svg'],
       manifest: {
         name: 'CNH Digital',
         short_name: 'CNH Digital',

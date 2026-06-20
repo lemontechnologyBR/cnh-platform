@@ -89,7 +89,7 @@ export default function HomePage() {
       {/* Footer logos */}
       <div style={{ background: '#EBEBEB', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexShrink: 0 }}>
         <img src="/serpro.png" alt="Serpro" style={{ height: 40, objectFit: 'contain', flex: 1 }} />
-        <img src="/cnhdobrasil.png" alt="CNH" style={{ height: 40, objectFit: 'contain', flex: 1 }} />
+        <img src="/cnh-logo.png" alt="CNH" style={{ height: 40, objectFit: 'contain', flex: 1 }} />
         <img src="/ministerioTransp.png" alt="Ministério" style={{ height: 56, objectFit: 'contain', flex: 2 }} />
       </div>
     </div>
