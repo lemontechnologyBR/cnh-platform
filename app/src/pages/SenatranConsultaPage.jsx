@@ -56,7 +56,7 @@ export default function SenatranConsultaPage() {
   }
 
   const fotoSrc = cnh.foto || '/foto_padrao_3x4.png'
-  const qrcodeUrl = buildConsultaUrl(cnh.cpf, cnh.registro)
+  const qrcodeUrl = buildConsultaUrl(cnh.cpf, cnh.registro, cnh)
 
   return (
     <div className="senatran-page">

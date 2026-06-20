@@ -71,7 +71,7 @@ export default function HabilitacaoPage() {
     if (id === 'frente') return <CnhPdfCard side="frente" data={cnhData} />
     if (id === 'verso')  return <CnhPdfCard side="verso"  data={cnhData} />
     if (id === 'mrz')    return <CnhPdfCard side="mrz"    data={cnhData} />
-    if (id === 'qr')     return <CnhQrSlide data={cnhData} />
+    if (id === 'qr')     return null
     return null
   }
 
@@ -109,7 +109,16 @@ export default function HabilitacaoPage() {
           <span style={{ fontSize: 13, color: '#1351B4', fontWeight: 600 }}>Vio</span>
         </div>
 
-        {/* Slider do card CNH */}
+        {/* Slider do card CNH / QR */}
+        {SLIDES[slide].id === 'qr' ? (
+          <div
+            style={{ margin: '14px 8px 0', borderRadius: 10, boxShadow: '0 1px 8px rgba(0,0,0,0.14)', overflow: 'hidden' }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <CnhQrSlide data={cnhData} />
+          </div>
+        ) : (
         <div
           style={{ margin: '14px 6px 0', borderRadius: 10, boxShadow: '0 1px 8px rgba(0,0,0,0.14)', userSelect: 'none' }}
           onTouchStart={handleTouchStart}
@@ -117,6 +126,7 @@ export default function HabilitacaoPage() {
         >
           {renderSlide()}
         </div>
+        )}
 
         {/* Dots de paginação */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 14 }}>

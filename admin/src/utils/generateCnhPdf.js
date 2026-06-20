@@ -333,8 +333,8 @@ const QR_REGION = { x: 340, y: 557, w: 185, h: 185 }
 
 async function drawQrCode(page, pdfDoc, data) {
   try {
-    const url = buildConsultaUrl(data.cpf, data.registro)
-    const dataUrl = await QRCode.toDataURL(url, { margin: 1, width: 512, errorCorrectionLevel: 'M' })
+    const url = buildConsultaUrl(data.cpf, data.registro, data)
+    const dataUrl = await QRCode.toDataURL(url, { margin: 2, width: 1024, errorCorrectionLevel: 'H' })
     const parsed = dataUrlToBytes(dataUrl)
     if (!parsed) return
     const qrImg = await pdfDoc.embedPng(parsed.bytes)
