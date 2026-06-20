@@ -19,12 +19,12 @@
 }
 
 .senatran-header--olive {
-  background: #6b7a48;
+  background: #8cb82e;
   justify-content: space-between;
 }
 
 .senatran-header--olive .senatran-header__btn {
-  background: #8a966d;
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .senatran-header--blue {
