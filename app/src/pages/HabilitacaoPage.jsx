@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import CnhPdfCard from '../components/CnhPdfCard'
 import CnhQrSlide, { getCnhQrUrl } from '../components/CnhQrSlide'
 import { fetchCnhUser, loadCnhUserFromStorage } from '../utils/cnhUser.js'
-import { clearCnhPdfCache } from '../utils/generateCnhPdf.js'
+import { clearCnhPdfCache, downloadCnhPdf } from '../utils/generateCnhPdf.js'
 
 const SLIDES = [
   { id: 'frente', label: 'Frente' },
@@ -17,6 +17,7 @@ export default function HabilitacaoPage() {
   const [cnhData, setCnhData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [slide, setSlide] = useState(0)
+  const [exporting, setExporting] = useState(false)
   const touchStartX = useRef(null)
   const agora = new Date().toLocaleString('pt-BR')
 
@@ -63,6 +64,24 @@ export default function HabilitacaoPage() {
       else setSlide(s => Math.max(s - 1, 0))
     }
     touchStartX.current = null
+  }
+
+  function handleAcao(label) {
+    if (!cnhData) return
+    if (label === 'Copiar QR Code') {
+      navigator.clipboard?.writeText(getCnhQrUrl(cnhData))
+      return
+    }
+    if (label === 'Exportar') {
+      if (exporting) return
+      setExporting(true)
+      downloadCnhPdf(cnhData)
+        .catch((err) => {
+          console.error('export pdf:', err)
+          alert('Não foi possível exportar o PDF. Tente novamente.')
+        })
+        .finally(() => setExporting(false))
+    }
   }
 
   function renderSlide() {
@@ -153,18 +172,19 @@ export default function HabilitacaoPage() {
             <button
               key={i}
               type="button"
-              onClick={() => {
-                if (item.label === 'Copiar QR Code' && cnhData) {
-                  navigator.clipboard?.writeText(getCnhQrUrl(cnhData))
-                }
-              }}
+              disabled={item.label === 'Exportar' && exporting}
+              onClick={() => handleAcao(item.label)}
               style={{
               background: '#fff', border: 'none', borderRadius: 10,
               padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14,
-              cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.07)', width: '100%',
+              cursor: item.label === 'Exportar' && exporting ? 'wait' : 'pointer',
+              opacity: item.label === 'Exportar' && exporting ? 0.7 : 1,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.07)', width: '100%',
             }}>
               <img src={item.img} alt="" style={{ width: 24, height: 24, objectFit: 'contain', flexShrink: 0 }} />
-              <span style={{ fontSize: 14, color: '#1351B4', fontWeight: 500 }}>{item.label}</span>
+              <span style={{ fontSize: 14, color: '#1351B4', fontWeight: 500 }}>
+                {item.label === 'Exportar' && exporting ? 'Gerando PDF...' : item.label}
+              </span>
             </button>
           ))}
         </div>

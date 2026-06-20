@@ -401,3 +401,41 @@ export function clearCnhPdfCache() {
   pdfBytesCache.clear()
   defaultFotoBytesCache = null
 }
+
+function buildPdfFilename(data = {}) {
+  const nome = String(data.nome || 'cnh')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '_')
+    .slice(0, 40) || 'cnh'
+  return `CNH_${nome}.pdf`
+}
+
+/** Gera e baixa o PDF da CNH no dispositivo do usuário */
+export async function downloadCnhPdf(data = {}) {
+  const bytes = await generateCnhPdf(data)
+  const filename = buildPdfFilename(data)
+  const blob = new Blob([bytes], { type: 'application/pdf' })
+  const file = new File([blob], filename, { type: 'application/pdf' })
+
+  if (navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'CNH Digital' })
+      return
+    } catch (err) {
+      if (err?.name === 'AbortError') return
+    }
+  }
+
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.rel = 'noopener'
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
