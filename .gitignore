@@ -9,4 +9,4 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 admin/server/db.json
-data/
+/data/
